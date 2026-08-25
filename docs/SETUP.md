@@ -7,7 +7,7 @@ Install the following tools:
 - Git
 - Node.js (LTS recommended)
 - npm (comes with Node.js)
-- Java JDK 21+
+- Java JDK 25+
 - Maven (or use Maven Wrapper in `backend/`)
 - IDE/editor (VS Code recommended)
 
