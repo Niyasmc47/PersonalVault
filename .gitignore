@@ -1,0 +1,34 @@
+# Frontend
+/frontend/node_modules/
+/frontend/dist/
+.env
+.env.*
+!.env.example
+
+# Backend
+/backend/target/
+*.class
+
+# IDE
+.idea
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Accidental machine/user-specific files at repository root
+/.bash_profile
+/.bashrc
+/.gitconfig
+/.gitmodules
+/.mcp.json
+/.profile
+/.ripgreprc
+/.zprofile
+/.zshrc
