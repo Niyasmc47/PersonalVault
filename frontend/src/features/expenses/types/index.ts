@@ -21,7 +21,7 @@ export type IncomeCategory =
   | 'BUSINESS' 
   | 'SCHOLARSHIP' 
   | 'GIFT' 
-  | 'OTHER';
+  | 'INCOME_OTHER';
 
 export type TransactionCategory = ExpenseCategory | IncomeCategory;
 

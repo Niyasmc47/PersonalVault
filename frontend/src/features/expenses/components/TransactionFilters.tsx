@@ -8,7 +8,7 @@ interface TransactionFiltersProps {
 const ALL_CATEGORIES: TransactionCategory[] = [
   'SALARY', 'FREELANCE', 'BUSINESS', 'SCHOLARSHIP', 'GIFT',
   'FOOD', 'TRANSPORT', 'EDUCATION', 'SHOPPING', 'BILLS', 
-  'ENTERTAINMENT', 'HEALTHCARE', 'TRAVEL', 'OTHER'
+  'ENTERTAINMENT', 'HEALTHCARE', 'TRAVEL', 'OTHER', 'INCOME_OTHER'
 ];
 
 export default function TransactionFilters({ filters, onChange }: TransactionFiltersProps) {
@@ -40,7 +40,7 @@ export default function TransactionFilters({ filters, onChange }: TransactionFil
 
   const getFilteredCategories = () => {
     if (filters.type === 'INCOME') {
-      return ['SALARY', 'FREELANCE', 'BUSINESS', 'SCHOLARSHIP', 'GIFT', 'OTHER'];
+      return ['SALARY', 'FREELANCE', 'BUSINESS', 'SCHOLARSHIP', 'GIFT', 'INCOME_OTHER'];
     } else if (filters.type === 'EXPENSE') {
       return ['FOOD', 'TRANSPORT', 'EDUCATION', 'SHOPPING', 'BILLS', 'ENTERTAINMENT', 'HEALTHCARE', 'TRAVEL', 'OTHER'];
     }
@@ -75,7 +75,7 @@ export default function TransactionFilters({ filters, onChange }: TransactionFil
           <select value={filters.category || ''} onChange={handleCategoryChange} style={inputStyle}>
             <option value="">All Categories</option>
             {getFilteredCategories().map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
+              <option key={cat} value={cat}>{cat === 'INCOME_OTHER' ? 'OTHER' : cat}</option>
             ))}
           </select>
         </div>

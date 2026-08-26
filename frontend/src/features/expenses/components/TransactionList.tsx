@@ -78,7 +78,7 @@ export default function TransactionList({ transactions, isLoading, onEdit, onDel
                   {t.type}
                 </span>
               </td>
-              <td style={{ padding: '16px 8px', fontSize: '14px', fontWeight: 'bold' }}>{t.category}</td>
+              <td style={{ padding: '16px 8px', fontSize: '14px', fontWeight: 'bold' }}>{t.category === 'INCOME_OTHER' ? 'OTHER' : t.category}</td>
               <td style={{ padding: '16px 8px', fontSize: '14px' }}>{t.description || '-'}</td>
               <td style={{ padding: '16px 8px', fontSize: '14px' }}>{t.paymentMethod.replace('_', ' ')}</td>
               <td style={{ 

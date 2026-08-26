@@ -6,7 +6,7 @@ import { X } from 'lucide-react';
 import { useEffect } from 'react';
 
 const expenseCategories: ExpenseCategory[] = ['FOOD', 'TRANSPORT', 'EDUCATION', 'SHOPPING', 'BILLS', 'ENTERTAINMENT', 'HEALTHCARE', 'TRAVEL', 'OTHER'];
-const incomeCategories: IncomeCategory[] = ['SALARY', 'FREELANCE', 'BUSINESS', 'SCHOLARSHIP', 'GIFT', 'OTHER'];
+const incomeCategories: IncomeCategory[] = ['SALARY', 'FREELANCE', 'BUSINESS', 'SCHOLARSHIP', 'GIFT', 'INCOME_OTHER'];
 const paymentMethods: PaymentMethod[] = ['CASH', 'UPI', 'CARD', 'BANK_TRANSFER', 'OTHER'];
 
 const schema = z.object({
@@ -146,7 +146,7 @@ export default function TransactionForm({ initialData, isOpen, onClose, onSubmit
               <label style={labelStyle}>Category</label>
               <select {...register('category')} style={inputStyle}>
                 {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
+                  <option key={cat} value={cat}>{cat === 'INCOME_OTHER' ? 'OTHER' : cat}</option>
                 ))}
               </select>
               {errors.category && <div style={errorStyle}>{errors.category.message}</div>}
