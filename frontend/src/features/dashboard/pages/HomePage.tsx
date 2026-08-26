@@ -28,33 +28,40 @@ export default function HomePage() {
           <img 
             src="/assets/ribbon.png" 
             alt="3D Blue Ribbon" 
-            style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '120%', maxWidth: '1400px', opacity: 0.9, zIndex: 1 }}
+            style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', maxWidth: '1200px', opacity: 0.8, zIndex: 0, objectFit: 'contain' }}
           />
           <img 
             src="/assets/rocket.png" 
             className="pv-sticker" 
             alt="Rocket" 
-            style={{ top: '15%', left: '15%', transform: 'rotate(-15deg)' }}
+            style={{ top: '15%', left: '15%', transform: 'rotate(-15deg)', zIndex: 2 }}
           />
           <img 
             src="/assets/wallet.png" 
             className="pv-sticker" 
             alt="Wallet" 
-            style={{ top: '60%', right: '15%', transform: 'rotate(10deg)' }}
+            style={{ top: '60%', right: '15%', transform: 'rotate(10deg)', zIndex: 2 }}
           />
         </div>
 
-        <div className="pv-hero-content">
+        <div className="pv-hero-content" style={{ position: 'relative', zIndex: 10 }}>
           <h1>PERSONAL<br/>VAULT</h1>
           <p>
             One secure place for your credentials, finances, skills, projects, and career data.
           </p>
-          <div style={{ display: 'flex', gap: 'var(--sp-12)', justifyContent: 'center', flexWrap: 'wrap', position: 'relative', zIndex: 10 }}>
-            <Link to="/vault" className="pv-btn pv-btn--dark">
-              Launch App
-            </Link>
-            <Link to="#features" className="pv-btn pv-btn--light">
+          <div style={{ display: 'flex', gap: 'var(--sp-12)', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a 
+              href="#portfolio" 
+              className="pv-btn pv-btn--dark"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Explore Features
+            </a>
+            <Link to="/resume" className="pv-btn pv-btn--light">
+              Get Resume
             </Link>
           </div>
         </div>
@@ -99,12 +106,28 @@ export default function HomePage() {
       </section>
 
       {/* ── 3. Career & Portfolio (Paper White) ────────────── */}
-      <section className="pv-section pv-section--white" style={{ minHeight: '80vh', padding: '120px 0' }}>
+      <section id="portfolio" className="pv-section pv-section--white" style={{ minHeight: '80vh', padding: '120px 0' }}>
         <div className="pv-container">
           <h2 className="pv-section-title" style={{ textAlign: 'center', marginBottom: '64px' }}>YOUR<br/>PORTFOLIO</h2>
           
           <div className="pv-features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
             
+            <Link to="/vault" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
+              <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
+                <Lock size={22} color="var(--color-carbon)" strokeWidth={2.5} />
+              </div>
+              <div className="pv-feature-card__name">Secure Vault</div>
+              <div className="pv-feature-card__desc">Store and manage sensitive personal information with encryption-level security.</div>
+            </Link>
+
+            <Link to="/expenses" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
+              <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
+                <Wallet size={22} color="var(--color-carbon)" strokeWidth={2.5} />
+              </div>
+              <div className="pv-feature-card__name">Expense Tracker</div>
+              <div className="pv-feature-card__desc">Track daily expenses, set budgets, and gain insights into your spending habits.</div>
+            </Link>
+
             <Link to="/skills" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
               <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
                 <Award size={22} color="var(--color-carbon)" strokeWidth={2.5} />

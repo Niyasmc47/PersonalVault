@@ -15,6 +15,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 
 import java.util.List;
 
@@ -27,17 +30,30 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final ClientRegistrationRepository clientRegistrationRepository;
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter, 
                           UserDetailsService userDetailsService, 
                           PasswordEncoder passwordEncoder,
                           CustomOAuth2UserService customOAuth2UserService,
-                          OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler) {
+                          OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler,
+                          ClientRegistrationRepository clientRegistrationRepository) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.customOAuth2UserService = customOAuth2UserService;
         this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
+        this.clientRegistrationRepository = clientRegistrationRepository;
+    }
+
+    private OAuth2AuthorizationRequestResolver customAuthorizationRequestResolver() {
+        DefaultOAuth2AuthorizationRequestResolver resolver = 
+            new DefaultOAuth2AuthorizationRequestResolver(clientRegistrationRepository, "/oauth2/authorization");
+        
+        resolver.setAuthorizationRequestCustomizer(customizer -> 
+            customizer.additionalParameters(params -> params.put("prompt", "select_account"))
+        );
+        return resolver;
     }
 
     @Bean
@@ -62,6 +78,9 @@ public class SecurityConfig {
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .oauth2Login(oauth2 -> oauth2
+                .authorizationEndpoint(auth -> auth
+                    .authorizationRequestResolver(customAuthorizationRequestResolver())
+                )
                 .userInfoEndpoint(userInfo -> userInfo
                     .userService(customOAuth2UserService)
                 )
