@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../../contexts/AuthContext';
+// import { useAuth } from '../../../contexts/AuthContext';
 import {
   Lock,
   Wallet,
@@ -9,11 +9,11 @@ import {
   GraduationCap,
   Link as LinkIcon,
   FileText,
-  User
+  // User
 } from 'lucide-react';
 
 export default function HomePage() {
-  const { user } = useAuth();
+  // const { user } = useAuth();
 
   return (
     <div>
@@ -158,14 +158,13 @@ export default function HomePage() {
       </section>
 
       {/* ── 4. Account Section ───────────────────────────── */}
-      <section className="pv-section pv-section--blue" style={{ borderTop: '1px solid var(--color-carbon)', padding: '80px 0' }}>
+      {/* <section className="pv-section pv-section--blue" style={{ borderTop: '1px solid var(--color-carbon)', padding: '80px 0' }}>
         <div className="pv-container">
           <div className="pv-account-bar" style={{ maxWidth: '800px', margin: '0 auto', background: 'var(--color-paper-white)', borderRadius: '40px' }}>
             <div className="pv-account-bar__info">
               <div className="pv-account-bar__name">{user?.name || 'User Account'}</div>
               <div className="pv-account-bar__meta">
                 <span>{user?.email}</span>
-                {/* Notice: No role badge is shown here, all users are just users. */}
               </div>
             </div>
             <Link to="/profile" className="pv-btn pv-btn--dark">
@@ -174,7 +173,7 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }
