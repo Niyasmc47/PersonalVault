@@ -12,8 +12,12 @@ export const authService = {
     return response.data;
   },
 
+  async logout(): Promise<void> {
+    await apiClient.post('/api/auth/logout');
+  },
+
   async getCurrentUser(): Promise<User> {
-    const response = await apiClient.get<User>('/api/users/me');
+    const response = await apiClient.get<User>('/api/auth/me');
     return response.data;
   },
 

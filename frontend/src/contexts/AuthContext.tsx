@@ -23,17 +23,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const initAuth = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const currentUser = await authService.getCurrentUser();
-          setUser(currentUser);
-        } catch (error) {
-          console.error('Failed to restore session', error);
-          localStorage.removeItem('token');
-        }
+      try {
+        const currentUser = await authService.getCurrentUser();
+        setUser(currentUser);
+      } catch (error) {
+        console.log('No active session found.');
+        setUser(null);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
     initAuth();
@@ -47,19 +45,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (data: any) => {
     const response: AuthResponse = await authService.login(data);
-    localStorage.setItem('token', response.token);
     setUser(response.user);
   };
 
   const register = async (data: any) => {
     const response: AuthResponse = await authService.register(data);
-    localStorage.setItem('token', response.token);
     setUser(response.user);
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    setUser(null);
+  const logout = async () => {
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.error('Logout failed', error);
+    } finally {
+      setUser(null);
+    }
   };
 
   const updateUser = (updatedUser: User) => {

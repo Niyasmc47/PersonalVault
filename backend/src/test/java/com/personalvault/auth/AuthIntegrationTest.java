@@ -15,11 +15,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import jakarta.servlet.http.Cookie;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,12 +35,16 @@ class AuthIntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
+    private com.personalvault.repository.transaction.TransactionRepository transactionRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
+        transactionRepository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -52,7 +59,8 @@ class AuthIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").exists())
+                .andExpect(cookie().exists("jwt"))
+                .andExpect(jsonPath("$.token").doesNotExist())
                 .andExpect(jsonPath("$.user.name").value("Test User"))
                 .andExpect(jsonPath("$.user.email").value("test@example.com"));
 
@@ -100,7 +108,7 @@ class AuthIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").exists());
+                .andExpect(cookie().exists("jwt"));
     }
 
     @Test
@@ -143,11 +151,11 @@ class AuthIntegrationTest {
                 .andReturn();
 
         String responseStr = result.getResponse().getContentAsString();
-        String token = objectMapper.readTree(responseStr).get("token").asText();
 
         // 2. Access protected endpoint
-        mockMvc.perform(get("/api/users/me")
-                .header("Authorization", "Bearer " + token))
+        Cookie jwtCookie = result.getResponse().getCookie("jwt");
+        mockMvc.perform(get("/api/auth/me")
+                .cookie(jwtCookie))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value("protected@example.com"));
     }

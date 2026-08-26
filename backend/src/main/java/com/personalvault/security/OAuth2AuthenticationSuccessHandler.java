@@ -1,13 +1,13 @@
 package com.personalvault.security;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
@@ -30,10 +30,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String token = jwtService.generateToken(userDetails);
 
-        String targetUrl = UriComponentsBuilder.fromUriString(frontendUrl + "/oauth2/callback")
-                .queryParam("token", token)
-                .build().toUriString();
+        Cookie cookie = new Cookie("jwt", token);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // Should be true in production with HTTPS
+        cookie.setPath("/");
+        cookie.setMaxAge(1000 * 60 * 24); // 24 hours
+        response.addCookie(cookie);
 
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        getRedirectStrategy().sendRedirect(request, response, frontendUrl + "/home"); // No need for oauth2 callback page if cookie is set
     }
 }
