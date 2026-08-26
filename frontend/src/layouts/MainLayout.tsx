@@ -52,7 +52,7 @@ export default function MainLayout() {
       <footer className="pv-footer">
         <div className="pv-container pv-footer-inner">
           <div className="pv-footer__brand">
-            <div className="pv-logo" style={{ color: 'var(--color-paper-white)' }}>PersonalVault</div>
+            <div className="pv-logo" style={{ color: 'var(--color-carbon)' }}>PersonalVault</div>
             <p>Your secure personal digital vault. Manage credentials, expenses, skills, projects, and more — all from one place.</p>
           </div>
           <div className="pv-footer__links">

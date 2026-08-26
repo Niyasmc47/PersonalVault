@@ -9,164 +9,172 @@ import {
   GraduationCap,
   Link as LinkIcon,
   FileText,
-  ArrowRight,
-  Shield,
-  User,
+  User
 } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
 
-/* ── Feature definitions ─────────────────────────────────── */
-interface Feature {
-  path: string;
-  name: string;
-  description: string;
-  icon: LucideIcon;
-}
-
-const FEATURES: Feature[] = [
-  {
-    path: '/vault',
-    name: 'Vault',
-    description: 'Store and manage sensitive personal information with encryption-level security.',
-    icon: Lock,
-  },
-  {
-    path: '/expenses',
-    name: 'Expenses',
-    description: 'Track daily expenses, set budgets, and gain insights into your spending habits.',
-    icon: Wallet,
-  },
-  {
-    path: '/skills',
-    name: 'Skills',
-    description: 'Catalog your technical and soft skills with proficiency levels and categories.',
-    icon: Award,
-  },
-  {
-    path: '/projects',
-    name: 'Projects',
-    description: 'Organize academic and personal projects with descriptions, links, and status tracking.',
-    icon: Briefcase,
-  },
-  {
-    path: '/achievements',
-    name: 'Achievements',
-    description: 'Record academic awards, hackathon wins, and professional milestones in one place.',
-    icon: Trophy,
-  },
-  {
-    path: '/certificates',
-    name: 'Certificates',
-    description: 'Manage certifications and credentials with issue dates, providers, and verification links.',
-    icon: GraduationCap,
-  },
-  {
-    path: '/social',
-    name: 'Social Links',
-    description: 'Consolidate GitHub, LinkedIn, portfolio, and other professional profile links.',
-    icon: LinkIcon,
-  },
-  {
-    path: '/resume',
-    name: 'Resume',
-    description: 'Build and maintain your resume data that feeds directly into generated documents.',
-    icon: FileText,
-  },
-];
-
-/* ── Quick access items ──────────────────────────────────── */
-const QUICK_ACCESS = [
-  { path: '/vault', label: 'Open Vault', icon: Shield },
-  { path: '/expenses', label: 'Track Expenses', icon: Wallet },
-  { path: '/skills', label: 'My Skills', icon: Award },
-  { path: '/profile', label: 'Account Settings', icon: User },
-];
-
-/* ── Component ───────────────────────────────────────────── */
 export default function HomePage() {
   const { user } = useAuth();
 
   return (
     <div>
-      {/* ── 1. Hero Section ────────────────────────────────── */}
-      <section className="pv-hero" style={{ margin: 'var(--sp-24) auto', maxWidth: 'var(--page-max)' }}>
-        <div className="pv-section-eyebrow" style={{ color: 'var(--color-signal-blue)', marginBottom: 'var(--sp-16)' }}>
-          Welcome back, {user?.name || 'User'}
+      {/* ── Marquee ──────────────────────────────────────── */}
+      <div className="pv-marquee">
+        <p>ALL YOUR DATA · ONE VAULT · SECURE AND PRIVATE · ALL YOUR DATA · ONE VAULT · SECURE AND PRIVATE · ALL YOUR DATA · ONE VAULT · SECURE AND PRIVATE · ALL YOUR DATA · ONE VAULT · SECURE AND PRIVATE · ALL YOUR DATA · ONE VAULT · SECURE AND PRIVATE</p>
+      </div>
+
+      {/* ── 1. Hero Poster ─────────────────────────────────── */}
+      <section className="pv-hero">
+        <div className="pv-hero-graphics">
+          <img 
+            src="/assets/ribbon.png" 
+            alt="3D Blue Ribbon" 
+            style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '120%', maxWidth: '1400px', opacity: 0.9, zIndex: 1 }}
+          />
+          <img 
+            src="/assets/rocket.png" 
+            className="pv-sticker" 
+            alt="Rocket" 
+            style={{ top: '15%', left: '15%', transform: 'rotate(-15deg)' }}
+          />
+          <img 
+            src="/assets/wallet.png" 
+            className="pv-sticker" 
+            alt="Wallet" 
+            style={{ top: '60%', right: '15%', transform: 'rotate(10deg)' }}
+          />
         </div>
-        <h1>Your Personal Digital Vault</h1>
-        <p>
-          One secure place for your credentials, finances, skills, projects, and career data.
-          PersonalVault keeps everything organized so you can focus on what matters.
-        </p>
-        <div style={{ display: 'flex', gap: 'var(--sp-12)', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link to="/vault" className="pv-btn pv-btn--light">
-            Open Vault
-            <ArrowRight size={16} />
-          </Link>
-          <Link to="#features" className="pv-btn" style={{ background: 'rgba(255,255,255,0.12)', color: 'var(--color-paper-white)', border: '1px solid rgba(255,255,255,0.15)' }}>
-            Explore Features
-          </Link>
+
+        <div className="pv-hero-content">
+          <h1>PERSONAL<br/>VAULT</h1>
+          <p>
+            One secure place for your credentials, finances, skills, projects, and career data.
+          </p>
+          <div style={{ display: 'flex', gap: 'var(--sp-12)', justifyContent: 'center', flexWrap: 'wrap', position: 'relative', zIndex: 10 }}>
+            <Link to="/vault" className="pv-btn pv-btn--dark">
+              Launch App
+            </Link>
+            <Link to="#features" className="pv-btn pv-btn--light">
+              Explore Features
+            </Link>
+          </div>
         </div>
       </section>
 
-      <div className="pv-container">
-        {/* ── 2. Quick Access ──────────────────────────────── */}
-        <section style={{ marginBottom: 'var(--section-gap)' }}>
-          <div className="pv-section-eyebrow">Quick Access</div>
-          <div className="pv-quick-row">
-            {QUICK_ACCESS.map((item) => (
-              <Link key={item.path} to={item.path} className="pv-quick-pill">
-                <item.icon size={16} />
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </section>
+      {/* ── 2. Core Modules (Concrete Gray) ────────────────── */}
+      <section id="features" className="pv-section pv-section--gray" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
+        <div className="pv-container" style={{ position: 'relative' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '48px', alignItems: 'center' }}>
+            
+            <div style={{ flex: '1 1 400px' }}>
+              <h2 className="pv-section-title" style={{ textAlign: 'left', marginBottom: '24px' }}>CORE<br/>TOOLS</h2>
+              <p style={{ fontSize: '24px', maxWidth: '400px', marginBottom: '32px' }}>
+                Secure everything. Track anything. The essential modules to keep your digital life intact.
+              </p>
+            </div>
 
-        {/* ── 3. Feature Overview ──────────────────────────── */}
-        <section id="features" style={{ marginBottom: 'var(--section-gap)' }}>
-          <div className="pv-section-eyebrow">Everything you need</div>
-          <h2 className="pv-section-title">All your data, one vault.</h2>
-          <p className="pv-section-subtitle" style={{ marginBottom: 'var(--sp-36)' }}>
-            PersonalVault is organized into focused modules. Each one is independently managed so your team can build and extend features without conflicts.
-          </p>
-
-          <div className="pv-features-grid">
-            {FEATURES.map((f) => (
-              <Link key={f.path} to={f.path} className="pv-feature-card">
-                <div className="pv-feature-card__icon">
-                  <f.icon size={22} color="var(--color-ink-black)" />
+            <div style={{ flex: '1 1 500px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <Link to="/vault" className="pv-feature-card" style={{ transform: 'rotate(-2deg)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div className="pv-feature-card__icon" style={{ background: 'var(--color-mint-pop)' }}>
+                    <Lock size={22} color="var(--color-carbon)" strokeWidth={2.5} />
+                  </div>
+                  <div className="pv-feature-card__name">Secure Vault</div>
                 </div>
-                <div className="pv-feature-card__name">{f.name}</div>
-                <div className="pv-feature-card__desc">{f.description}</div>
-                <div className="pv-feature-card__action">
-                  Open {f.name} <ArrowRight size={14} />
-                </div>
+                <div className="pv-feature-card__desc">Store and manage sensitive personal information with encryption-level security. No one else has access.</div>
               </Link>
-            ))}
-          </div>
-        </section>
 
-        {/* ── 4. Account Section ───────────────────────────── */}
-        <section style={{ marginBottom: 'var(--section-gap)' }}>
-          <div className="pv-section-eyebrow">Your Account</div>
-          <div className="pv-account-bar">
+              <Link to="/expenses" className="pv-feature-card" style={{ transform: 'rotate(1deg)', alignSelf: 'flex-end', width: '90%' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div className="pv-feature-card__icon" style={{ background: 'var(--color-sunburst)' }}>
+                    <Wallet size={22} color="var(--color-carbon)" strokeWidth={2.5} />
+                  </div>
+                  <div className="pv-feature-card__name">Expense Tracker</div>
+                </div>
+                <div className="pv-feature-card__desc">Track daily expenses, set budgets, and gain insights into your spending habits effortlessly.</div>
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3. Career & Portfolio (Paper White) ────────────── */}
+      <section className="pv-section pv-section--white" style={{ minHeight: '80vh', padding: '120px 0' }}>
+        <div className="pv-container">
+          <h2 className="pv-section-title" style={{ textAlign: 'center', marginBottom: '64px' }}>YOUR<br/>PORTFOLIO</h2>
+          
+          <div className="pv-features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+            
+            <Link to="/skills" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
+              <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
+                <Award size={22} color="var(--color-carbon)" strokeWidth={2.5} />
+              </div>
+              <div className="pv-feature-card__name">Skills</div>
+              <div className="pv-feature-card__desc">Catalog your technical and soft skills with proficiency levels.</div>
+            </Link>
+
+            <Link to="/projects" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
+              <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
+                <Briefcase size={22} color="var(--color-carbon)" strokeWidth={2.5} />
+              </div>
+              <div className="pv-feature-card__name">Projects</div>
+              <div className="pv-feature-card__desc">Organize academic and personal projects with status tracking.</div>
+            </Link>
+
+            <Link to="/achievements" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
+              <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
+                <Trophy size={22} color="var(--color-carbon)" strokeWidth={2.5} />
+              </div>
+              <div className="pv-feature-card__name">Achievements</div>
+              <div className="pv-feature-card__desc">Record awards, hackathon wins, and professional milestones.</div>
+            </Link>
+
+            <Link to="/certificates" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
+              <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
+                <GraduationCap size={22} color="var(--color-carbon)" strokeWidth={2.5} />
+              </div>
+              <div className="pv-feature-card__name">Certificates</div>
+              <div className="pv-feature-card__desc">Manage certifications and credentials with verification links.</div>
+            </Link>
+
+            <Link to="/social" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
+              <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
+                <LinkIcon size={22} color="var(--color-carbon)" strokeWidth={2.5} />
+              </div>
+              <div className="pv-feature-card__name">Social Links</div>
+              <div className="pv-feature-card__desc">Consolidate GitHub, LinkedIn, and professional profile links.</div>
+            </Link>
+
+            <Link to="/resume" className="pv-feature-card" style={{ background: 'var(--color-electric-blue)', color: 'var(--color-paper-white)', borderRadius: '40px' }}>
+              <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
+                <FileText size={22} color="var(--color-carbon)" strokeWidth={2.5} />
+              </div>
+              <div className="pv-feature-card__name">Resume Builder</div>
+              <div className="pv-feature-card__desc" style={{ color: 'var(--color-paper-white)' }}>Build and maintain your resume data that feeds directly into generated documents.</div>
+            </Link>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ── 4. Account Section ───────────────────────────── */}
+      <section className="pv-section pv-section--blue" style={{ borderTop: '1px solid var(--color-carbon)', padding: '80px 0' }}>
+        <div className="pv-container">
+          <div className="pv-account-bar" style={{ maxWidth: '800px', margin: '0 auto', background: 'var(--color-paper-white)', borderRadius: '40px' }}>
             <div className="pv-account-bar__info">
-              <div className="pv-account-bar__name">{user?.name || 'User'}</div>
+              <div className="pv-account-bar__name">{user?.name || 'User Account'}</div>
               <div className="pv-account-bar__meta">
                 <span>{user?.email}</span>
-                <span className="pv-account-bar__badge">
-                  {user?.provider === 'GOOGLE' ? '● Google' : '● Local'}
-                </span>
+                {/* Notice: No role badge is shown here, all users are just users. */}
               </div>
             </div>
-            <Link to="/profile" className="pv-btn pv-btn--ghost">
-              <User size={16} />
+            <Link to="/profile" className="pv-btn pv-btn--dark">
+              <User size={16} strokeWidth={2.5} />
               Manage Profile
             </Link>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }
