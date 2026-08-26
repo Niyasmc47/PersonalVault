@@ -24,28 +24,8 @@ export default function HomePage() {
 
       {/* ── 1. Hero Poster ─────────────────────────────────── */}
       <section className="pv-hero">
-        <div className="pv-hero-graphics">
-          <img 
-            src="/assets/ribbon.png" 
-            alt="3D Blue Ribbon" 
-            style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', maxWidth: '1200px', opacity: 0.8, zIndex: 0, objectFit: 'contain' }}
-          />
-          <img 
-            src="/assets/rocket.png" 
-            className="pv-sticker" 
-            alt="Rocket" 
-            style={{ top: '15%', left: '15%', transform: 'rotate(-15deg)', zIndex: 2 }}
-          />
-          <img 
-            src="/assets/wallet.png" 
-            className="pv-sticker" 
-            alt="Wallet" 
-            style={{ top: '60%', right: '15%', transform: 'rotate(10deg)', zIndex: 2 }}
-          />
-        </div>
-
         <div className="pv-hero-content" style={{ position: 'relative', zIndex: 10 }}>
-          <h1>PERSONAL<br/>VAULT</h1>
+          <h1>PERSONAL VAULT</h1>
           <p>
             One secure place for your credentials, finances, skills, projects, and career data.
           </p>

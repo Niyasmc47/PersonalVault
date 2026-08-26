@@ -144,8 +144,10 @@
 /* ── Hero Section (Slush theme) ──────────────────────────── */
 .pv-hero {
   position: relative;
-  background: var(--surface-sky-wash);
-  padding: var(--sp-80) 0 var(--sp-128) 0;
+  background-color: var(--surface-sky-wash);
+  background-image: radial-gradient(var(--color-carbon) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+  padding: var(--sp-128) 0 var(--sp-128) 0;
   overflow: hidden;
   border-bottom: 1px solid var(--color-carbon);
 }
@@ -160,7 +162,7 @@
 
 .pv-hero h1 {
   font-family: var(--font-lateral);
-  font-size: clamp(80px, 12vw, 200px);
+  font-size: clamp(48px, 10vw, 140px);
   line-height: var(--leading-display);
   font-weight: var(--font-weight-extrabold);
   text-transform: uppercase;
