@@ -82,7 +82,7 @@ export default function MainLayout() {
           </div>
         </div>
         <div className="pv-container pv-footer-bottom">
-          © {new Date().getFullYear()} PersonalVault · College Microproject
+          © {new Date().getFullYear()} PersonalVault · All in one file solution
         </div>
       </footer>
     </div>
