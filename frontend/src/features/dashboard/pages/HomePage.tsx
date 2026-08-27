@@ -30,8 +30,8 @@ export default function HomePage() {
             One secure place for your credentials, finances, skills, projects, and career data.
           </p>
           <div style={{ display: 'flex', gap: 'var(--sp-12)', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a 
-              href="#portfolio" 
+            <a
+              href="#portfolio"
               className="pv-btn pv-btn--dark"
               onClick={(e) => {
                 e.preventDefault();
@@ -51,9 +51,9 @@ export default function HomePage() {
       <section id="features" className="pv-section pv-section--gray" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
         <div className="pv-container" style={{ position: 'relative' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '48px', alignItems: 'center' }}>
-            
+
             <div style={{ flex: '1 1 400px' }}>
-              <h2 className="pv-section-title" style={{ textAlign: 'left', marginBottom: '24px' }}>CORE<br/>TOOLS</h2>
+              <h2 className="pv-section-title" style={{ textAlign: 'left', marginBottom: '24px' }}>CORE<br />TOOLS</h2>
               <p style={{ fontSize: '24px', maxWidth: '400px', marginBottom: '32px' }}>
                 Secure everything. Track anything. The essential modules to keep your digital life intact.
               </p>
@@ -88,10 +88,10 @@ export default function HomePage() {
       {/* ── 3. Career & Portfolio (Paper White) ────────────── */}
       <section id="portfolio" className="pv-section pv-section--white" style={{ minHeight: '80vh', padding: '120px 0' }}>
         <div className="pv-container">
-          <h2 className="pv-section-title" style={{ textAlign: 'center', marginBottom: '64px' }}>YOUR<br/>PORTFOLIO</h2>
-          
+          <h2 className="pv-section-title" style={{ textAlign: 'center', marginBottom: '64px' }}>YOUR<br />PORTFOLIO</h2>
+
           <div className="pv-features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-            
+
             <Link to="/vault" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
               <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
                 <Lock size={22} color="var(--color-carbon)" strokeWidth={2.5} />
