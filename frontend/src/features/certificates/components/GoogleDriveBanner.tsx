@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { GoogleDriveStatus } from '../types';
 import { certificateService } from '../services/certificateService';
 import { HardDrive, CheckCircle2, AlertCircle, ExternalLink, Unlink, Loader2 } from 'lucide-react';
@@ -28,9 +28,9 @@ export default function GoogleDriveBanner({
       if (authUrl) {
         window.location.href = authUrl;
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to get Drive authorization URL:', err);
-      setErrorMsg(err.response?.data?.error || 'Failed to initiate Google Drive authorization');
+      setErrorMsg((err as { response?: { data?: { error?: string } } }).response?.data?.error || 'Failed to initiate Google Drive authorization');
       setConnecting(false);
     }
   };
@@ -43,9 +43,9 @@ export default function GoogleDriveBanner({
       setDisconnecting(true);
       await certificateService.disconnectDrive();
       onRefresh();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to disconnect Google Drive:', err);
-      setErrorMsg(err.response?.data?.error || 'Failed to disconnect Google Drive');
+      setErrorMsg((err as { response?: { data?: { error?: string } } }).response?.data?.error || 'Failed to disconnect Google Drive');
     } finally {
       setDisconnecting(false);
     }

@@ -26,6 +26,7 @@ export default function CertificatePreview({
     let active = true;
     let createdUrl: string | null = null;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     setError(false);
 

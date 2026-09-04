@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Certificate } from '../types';
 import { AlertTriangle, Loader2 } from 'lucide-react';
 

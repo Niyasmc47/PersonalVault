@@ -2,12 +2,12 @@ import { apiClient } from '../../../services/apiClient';
 import type { AuthResponse, User } from '../types';
 
 export const authService = {
-  async register(data: any): Promise<AuthResponse> {
+  async register(data: unknown): Promise<AuthResponse> {
     const response = await apiClient.post<AuthResponse>('/api/auth/register', data);
     return response.data;
   },
 
-  async login(data: any): Promise<AuthResponse> {
+  async login(data: unknown): Promise<AuthResponse> {
     const response = await apiClient.post<AuthResponse>('/api/auth/login', data);
     return response.data;
   },
@@ -21,12 +21,12 @@ export const authService = {
     return response.data;
   },
 
-  async updateProfile(data: any): Promise<User> {
+  async updateProfile(data: unknown): Promise<User> {
     const response = await apiClient.put<User>('/api/users/me', data);
     return response.data;
   },
 
-  async updatePassword(data: any): Promise<void> {
+  async updatePassword(data: unknown): Promise<void> {
     await apiClient.put('/api/users/me/password', data);
   }
 };

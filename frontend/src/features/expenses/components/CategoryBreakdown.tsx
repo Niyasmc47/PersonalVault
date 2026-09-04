@@ -51,6 +51,7 @@ export default function CategoryBreakdown({ data, title }: CategoryBreakdownProp
               ))}
             </Pie>
             <Tooltip 
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               formatter={(value: any) => formatCurrency(Number(value))}
               contentStyle={{ borderRadius: '12px', border: '1px solid var(--color-carbon)', fontWeight: 'bold' }}
             />

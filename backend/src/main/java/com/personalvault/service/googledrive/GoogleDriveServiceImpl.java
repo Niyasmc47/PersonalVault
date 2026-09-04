@@ -40,7 +40,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     private final UserRepository userRepository;
     private final CertificateRepository certificateRepository;
     private final JwtService jwtService;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final HttpClient httpClient;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id:placeholder}")
@@ -58,13 +58,11 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     public GoogleDriveServiceImpl(UserGoogleDriveIntegrationRepository driveIntegrationRepository,
                                   UserRepository userRepository,
                                   CertificateRepository certificateRepository,
-                                  JwtService jwtService,
-                                  ObjectMapper objectMapper) {
+                                  JwtService jwtService) {
         this.driveIntegrationRepository = driveIntegrationRepository;
         this.userRepository = userRepository;
         this.certificateRepository = certificateRepository;
         this.jwtService = jwtService;
-        this.objectMapper = objectMapper;
         this.httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(20))
                 .build();

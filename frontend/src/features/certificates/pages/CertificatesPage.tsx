@@ -20,7 +20,6 @@ import CertificateFilters from '../components/CertificateFilters';
 import {
   GraduationCap,
   Plus,
-  FileCheck2,
   AlertCircle,
   CheckCircle2,
   X,
@@ -55,19 +54,23 @@ export default function CertificatesPage() {
     const driveError = searchParams.get('drive_error');
 
     if (driveConnected === 'true') {
-      setCallbackNotice({
-        type: 'success',
-        message: 'Google Drive connected successfully! You can now upload and manage certificates in your Drive.',
-      });
+      setTimeout(() => {
+        setCallbackNotice({
+          type: 'success',
+          message: 'Google Drive connected successfully! You can now upload and manage certificates in your Drive.',
+        });
+      }, 0);
       // Clear query params from URL
       searchParams.delete('drive_connected');
       setSearchParams(searchParams, { replace: true });
       queryClient.invalidateQueries({ queryKey: ['googleDriveStatus'] });
     } else if (driveError) {
-      setCallbackNotice({
-        type: 'error',
-        message: `Google Drive connection error: ${decodeURIComponent(driveError)}`,
-      });
+      setTimeout(() => {
+        setCallbackNotice({
+          type: 'error',
+          message: `Google Drive connection error: ${decodeURIComponent(driveError)}`,
+        });
+      }, 0);
       searchParams.delete('drive_error');
       setSearchParams(searchParams, { replace: true });
     }
@@ -111,8 +114,8 @@ export default function CertificatesPage() {
       queryClient.invalidateQueries({ queryKey: ['googleDriveStatus'] });
       setIsFormOpen(false);
     },
-    onError: (err: any) => {
-      alert(err.response?.data?.error || 'Failed to upload certificate. Please try again.');
+    onError: (err: unknown) => {
+      alert((err as { response?: { data?: { error?: string } } }).response?.data?.error || 'Failed to upload certificate. Please try again.');
     },
   });
 
@@ -128,8 +131,8 @@ export default function CertificatesPage() {
         setViewingCertificate(updatedCert);
       }
     },
-    onError: (err: any) => {
-      alert(err.response?.data?.error || 'Failed to update certificate. Please try again.');
+    onError: (err: unknown) => {
+      alert((err as { response?: { data?: { error?: string } } }).response?.data?.error || 'Failed to update certificate. Please try again.');
     },
   });
 
@@ -146,8 +149,8 @@ export default function CertificatesPage() {
         setViewingCertificate(null);
       }
     },
-    onError: (err: any) => {
-      alert(err.response?.data?.error || 'Failed to delete certificate. Please try again.');
+    onError: (err: unknown) => {
+      alert((err as { response?: { data?: { error?: string } } }).response?.data?.error || 'Failed to delete certificate. Please try again.');
     },
   });
 
@@ -195,7 +198,7 @@ export default function CertificatesPage() {
   const handleDownload = async (cert: Certificate) => {
     try {
       await certificateService.downloadCertificate(cert.id, cert.originalFileName);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Download failed:', err);
       alert('Failed to download certificate from Google Drive.');
     }

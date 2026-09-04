@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Certificate } from '../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS, EXPIRY_COLORS, EXPIRY_LABELS } from '../types';
 import CertificatePreview from './CertificatePreview';

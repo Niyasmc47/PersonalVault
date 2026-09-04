@@ -51,6 +51,7 @@ export default function CertificateFormModal({
 
   useEffect(() => {
     if (initialData) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTitle(initialData.title || '');
       setIssuer(initialData.issuer || '');
       setCategory(initialData.category || 'COURSE');

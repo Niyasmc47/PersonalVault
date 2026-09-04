@@ -39,6 +39,7 @@ export default function TransactionForm({ initialData, isOpen, onClose, onSubmit
     }
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const transactionType = watch('type');
 
   useEffect(() => {
