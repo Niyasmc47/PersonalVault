@@ -67,17 +67,26 @@ public class ProjectServiceImpl implements ProjectService {
                                             String search) {
         User user = getAuthenticatedUser(userEmail);
 
-        String trimmedSearch = (search != null && !search.trim().isBlank()) ? search.trim() : null;
-
-        List<Project> projects = projectRepository.findByUserWithFilters(
-                user,
-                category,
-                status,
-                featured,
-                trimmedSearch
-        );
+        List<Project> projects;
+        if (search != null && !search.isBlank()) {
+            projects = projectRepository.searchProjects(user, search.trim());
+        } else if (category != null) {
+            projects = projectRepository.findByUserAndCategoryOrderByUpdatedAtDesc(user, category);
+        } else if (status != null) {
+            projects = projectRepository.findByUserAndStatusOrderByUpdatedAtDesc(user, status);
+        } else if (featured != null && featured) {
+            projects = projectRepository.findByUserAndFeaturedTrueOrderByUpdatedAtDesc(user);
+        } else {
+            projects = projectRepository.findByUserOrderByUpdatedAtDesc(user);
+        }
 
         return projects.stream()
+                .filter(p -> {
+                    if (category != null && p.getCategory() != category) return false;
+                    if (status != null && p.getStatus() != status) return false;
+                    if (featured != null && p.isFeatured() != featured) return false;
+                    return true;
+                })
                 .map(projectMapper::toResponse)
                 .collect(Collectors.toList());
     }

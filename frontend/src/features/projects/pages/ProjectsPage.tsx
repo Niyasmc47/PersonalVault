@@ -210,7 +210,7 @@ export default function ProjectsPage() {
             id="add-project-btn"
           >
             <Plus size={18} strokeWidth={2.5} />
-            <span>+ Add Project</span>
+            <span>Add Project</span>
           </button>
         </div>
       </div>

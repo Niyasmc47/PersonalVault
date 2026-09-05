@@ -19,6 +19,10 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     Optional<Project> findByIdAndUser(Long id, User user);
 
+    List<Project> findByUserAndCategoryOrderByUpdatedAtDesc(User user, ProjectCategory category);
+
+    List<Project> findByUserAndStatusOrderByUpdatedAtDesc(User user, ProjectStatus status);
+
     List<Project> findByUserAndFeaturedTrueOrderByUpdatedAtDesc(User user);
 
     long countByUser(User user);
@@ -27,21 +31,10 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     long countByUserAndFeaturedTrue(User user);
 
-    @Query("SELECT DISTINCT p FROM Project p LEFT JOIN p.technologies t WHERE p.user = :user " +
-           "AND (CAST(:category AS string) IS NULL OR p.category = :category) " +
-           "AND (CAST(:status AS string) IS NULL OR p.status = :status) " +
-           "AND (:featured IS NULL OR p.featured = :featured) " +
-           "AND (:search IS NULL OR (" +
-           "     LOWER(p.title) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
-           "     LOWER(p.description) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
-           "     LOWER(t) LIKE LOWER(CONCAT('%', :search, '%'))" +
-           ")) " +
+    @Query("SELECT DISTINCT p FROM Project p LEFT JOIN p.technologies t WHERE p.user = :user AND " +
+           "(LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+           " LOWER(p.description) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+           " LOWER(t) LIKE LOWER(CONCAT('%', :query, '%'))) " +
            "ORDER BY p.updatedAt DESC")
-    List<Project> findByUserWithFilters(
-            @Param("user") User user,
-            @Param("category") ProjectCategory category,
-            @Param("status") ProjectStatus status,
-            @Param("featured") Boolean featured,
-            @Param("search") String search
-    );
+    List<Project> searchProjects(@Param("user") User user, @Param("query") String query);
 }
