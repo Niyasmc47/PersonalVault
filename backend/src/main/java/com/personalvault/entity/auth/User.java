@@ -33,6 +33,15 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<com.personalvault.entity.certificate.Certificate> certificates = new java.util.ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<com.personalvault.entity.project.Project> projects = new java.util.ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private com.personalvault.entity.googledrive.UserGoogleDriveIntegration googleDriveIntegration;
+
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
@@ -102,5 +111,29 @@ public class User {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public java.util.List<com.personalvault.entity.certificate.Certificate> getCertificates() {
+        return certificates;
+    }
+
+    public void setCertificates(java.util.List<com.personalvault.entity.certificate.Certificate> certificates) {
+        this.certificates = certificates;
+    }
+
+    public java.util.List<com.personalvault.entity.project.Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(java.util.List<com.personalvault.entity.project.Project> projects) {
+        this.projects = projects;
+    }
+
+    public com.personalvault.entity.googledrive.UserGoogleDriveIntegration getGoogleDriveIntegration() {
+        return googleDriveIntegration;
+    }
+
+    public void setGoogleDriveIntegration(com.personalvault.entity.googledrive.UserGoogleDriveIntegration googleDriveIntegration) {
+        this.googleDriveIntegration = googleDriveIntegration;
     }
 }

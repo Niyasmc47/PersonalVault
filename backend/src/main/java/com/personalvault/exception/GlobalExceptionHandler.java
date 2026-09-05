@@ -68,11 +68,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
+        log.error("Unhandled exception caught in GlobalExceptionHandler", ex);
         Map<String, String> error = new HashMap<>();
         error.put("error", "An unexpected error occurred");
-        // Log the actual exception here in a real app, but don't expose to client
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

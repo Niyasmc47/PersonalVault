@@ -1,2 +1,11 @@
-// Feature barrel for certificates. Add exports here when implementing certificates modules.
-export {}
+export * from './types';
+export * from './services/certificateService';
+export { default as CertificatesPage } from './pages/CertificatesPage';
+export { default as CertificateCard } from './components/CertificateCard';
+export { default as CertificatePreview } from './components/CertificatePreview';
+export { default as CertificateViewerModal } from './components/CertificateViewerModal';
+export { default as CertificateFormModal } from './components/CertificateFormModal';
+export { default as DeleteCertificateDialog } from './components/DeleteCertificateDialog';
+export { default as GoogleDriveBanner } from './components/GoogleDriveBanner';
+export { default as CertificateStats } from './components/CertificateStats';
+export { default as CertificateFilters } from './components/CertificateFilters';

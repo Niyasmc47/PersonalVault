@@ -7,8 +7,8 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (data: any) => Promise<void>;
-  register: (data: any) => Promise<void>;
+  login: (data: unknown) => Promise<void>;
+  register: (data: unknown) => Promise<void>;
   logout: () => void;
   updateUser: (user: User) => void;
 }
@@ -26,7 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const currentUser = await authService.getCurrentUser();
         setUser(currentUser);
-      } catch (error) {
+      } catch {
         console.log('No active session found.');
         setUser(null);
       } finally {
@@ -43,12 +43,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
   }, []);
 
-  const login = async (data: any) => {
+  const login = async (data: unknown) => {
     const response: AuthResponse = await authService.login(data);
     setUser(response.user);
   };
 
-  const register = async (data: any) => {
+  const register = async (data: unknown) => {
     const response: AuthResponse = await authService.register(data);
     setUser(response.user);
   };
@@ -74,6 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {

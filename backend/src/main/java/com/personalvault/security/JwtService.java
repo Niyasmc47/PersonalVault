@@ -67,6 +67,31 @@ public class JwtService {
                 .getPayload();
     }
 
+    public String generateOAuthStateToken(String email) {
+        return Jwts.builder()
+                .subject(email)
+                .claim("type", "oauth_state")
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 10 * 60 * 1000)) // 10 minutes
+                .signWith(getSignInKey())
+                .compact();
+    }
+
+    public String extractEmailFromOAuthStateToken(String stateToken) {
+        try {
+            Claims claims = extractAllClaims(stateToken);
+            if (!"oauth_state".equals(claims.get("type"))) {
+                return null;
+            }
+            if (claims.getExpiration().before(new Date())) {
+                return null;
+            }
+            return claims.getSubject();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private SecretKey getSignInKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
