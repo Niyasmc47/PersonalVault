@@ -2,21 +2,38 @@ package com.personalvault.dto.project;
 
 import com.personalvault.entity.project.ProjectCategory;
 import com.personalvault.entity.project.ProjectStatus;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 import java.util.List;
 
 public class UpdateProjectRequest {
 
+    @Size(max = 150, message = "Title cannot exceed 150 characters")
     private String title;
+
+    @Size(max = 5000, message = "Description cannot exceed 5000 characters")
     private String description;
+
     private ProjectCategory category;
     private ProjectStatus status;
     private LocalDate startDate;
     private LocalDate endDate;
     private List<String> technologies;
+
+    @Pattern(regexp = "^(https?://.*)?$", message = "GitHub URL must be a valid URL starting with http:// or https://")
+    @Size(max = 500, message = "GitHub URL cannot exceed 500 characters")
     private String githubUrl;
+
+    @Pattern(regexp = "^(https?://.*)?$", message = "Live URL must be a valid URL starting with http:// or https://")
+    @Size(max = 500, message = "Live URL cannot exceed 500 characters")
     private String liveUrl;
+
+    @Pattern(regexp = "^(https?://.*)?$", message = "Demo URL must be a valid URL starting with http:// or https://")
+    @Size(max = 500, message = "Demo URL cannot exceed 500 characters")
     private String demoUrl;
+
     private Boolean featured;
 
     // Getters and Setters

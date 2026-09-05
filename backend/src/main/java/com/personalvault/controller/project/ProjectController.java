@@ -3,9 +3,8 @@ package com.personalvault.controller.project;
 import com.personalvault.dto.project.CreateProjectRequest;
 import com.personalvault.dto.project.ProjectResponse;
 import com.personalvault.dto.project.UpdateProjectRequest;
-import com.personalvault.entity.auth.User;
-import com.personalvault.exception.ResourceNotFoundException;
-import com.personalvault.repository.auth.UserRepository;
+import com.personalvault.entity.project.ProjectCategory;
+import com.personalvault.entity.project.ProjectStatus;
 import com.personalvault.service.project.ProjectService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,32 +20,33 @@ import java.util.List;
 public class ProjectController {
 
     private final ProjectService projectService;
-    private final UserRepository userRepository;
 
-    public ProjectController(ProjectService projectService, UserRepository userRepository) {
+    public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
-        this.userRepository = userRepository;
-    }
-
-    private User getAuthenticatedUser(UserDetails userDetails) {
-        return userRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @PostMapping
     public ResponseEntity<ProjectResponse> createProject(
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody CreateProjectRequest request) {
-        User user = getAuthenticatedUser(userDetails);
-        ProjectResponse response = projectService.createProject(request, user);
+        ProjectResponse response = projectService.createProject(userDetails.getUsername(), request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<ProjectResponse>> getAllProjects(
-            @AuthenticationPrincipal UserDetails userDetails) {
-        User user = getAuthenticatedUser(userDetails);
-        List<ProjectResponse> responses = projectService.getAllProjects(user);
+    public ResponseEntity<List<ProjectResponse>> getProjects(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam(required = false) ProjectCategory category,
+            @RequestParam(required = false) ProjectStatus status,
+            @RequestParam(required = false) Boolean featured,
+            @RequestParam(required = false) String search) {
+        List<ProjectResponse> responses = projectService.getProjects(
+                userDetails.getUsername(),
+                category,
+                status,
+                featured,
+                search
+        );
         return ResponseEntity.ok(responses);
     }
 
@@ -54,8 +54,7 @@ public class ProjectController {
     public ResponseEntity<ProjectResponse> getProjectById(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id) {
-        User user = getAuthenticatedUser(userDetails);
-        ProjectResponse response = projectService.getProjectById(id, user);
+        ProjectResponse response = projectService.getProjectById(userDetails.getUsername(), id);
         return ResponseEntity.ok(response);
     }
 
@@ -64,8 +63,7 @@ public class ProjectController {
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id,
             @Valid @RequestBody UpdateProjectRequest request) {
-        User user = getAuthenticatedUser(userDetails);
-        ProjectResponse response = projectService.updateProject(id, request, user);
+        ProjectResponse response = projectService.updateProject(userDetails.getUsername(), id, request);
         return ResponseEntity.ok(response);
     }
 
@@ -73,8 +71,7 @@ public class ProjectController {
     public ResponseEntity<Void> deleteProject(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id) {
-        User user = getAuthenticatedUser(userDetails);
-        projectService.deleteProject(id, user);
+        projectService.deleteProject(userDetails.getUsername(), id);
         return ResponseEntity.noContent().build();
     }
 }

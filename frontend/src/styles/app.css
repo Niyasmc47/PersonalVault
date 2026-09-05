@@ -1513,3 +1513,456 @@
   border-color: var(--color-carbon) !important;
 }
 
+/* ============================================================
+   PersonalVault — Projects Feature
+   ============================================================ */
+
+.pv-project-page {
+  padding-bottom: var(--sp-60);
+}
+
+.pv-project-header {
+  margin-bottom: var(--sp-32);
+}
+
+/* ── Projects Grid ── */
+.pv-project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 640px) {
+  .pv-project-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Project Card ── */
+.pv-project-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-paper-white);
+  border: 2px solid var(--color-carbon);
+  border-radius: var(--r-2xl-2);
+  padding: 22px;
+  box-shadow: 4px 4px 0px var(--color-carbon);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+}
+
+.pv-project-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--color-carbon);
+}
+
+.pv-project-card--featured {
+  border-color: var(--color-carbon);
+  background: linear-gradient(180deg, #ffffff 0%, #faf8ff 100%);
+}
+
+.pv-project-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.pv-project-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.pv-project-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  padding: 3px 8px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--color-carbon);
+  white-space: nowrap;
+}
+
+.pv-project-badge--featured {
+  background: var(--color-lavender);
+  color: var(--color-carbon);
+}
+
+.pv-project-badge--category {
+  background: var(--color-soft-mist);
+  color: var(--color-carbon);
+}
+
+.pv-project-badge--status {
+  border: 1px solid var(--color-carbon);
+}
+
+.pv-project-card__main {
+  cursor: pointer;
+  flex: 1;
+}
+
+.pv-project-card__title {
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-carbon);
+  margin-bottom: 8px;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.pv-project-card__desc {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--color-carbon);
+  opacity: 0.85;
+  margin-bottom: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.pv-project-card__desc--empty {
+  font-style: italic;
+  opacity: 0.5;
+}
+
+/* ── Technologies Tags ── */
+.pv-project-card__tech-list,
+.pv-tech-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.pv-tech-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  background: var(--color-sky-wash);
+  color: var(--color-carbon);
+  border: 1px solid var(--color-carbon);
+  border-radius: 6px;
+}
+
+.pv-tech-tag--more {
+  background: var(--color-soft-mist);
+  opacity: 0.85;
+}
+
+.pv-tech-tag--lg {
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.pv-tech-tag--removable {
+  padding-right: 4px;
+}
+
+.pv-tech-tag__remove {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 50%;
+  color: var(--color-carbon);
+  opacity: 0.6;
+}
+
+.pv-tech-tag__remove:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.pv-tech-input-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+/* ── Date Meta ── */
+.pv-project-card__date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-carbon);
+  opacity: 0.75;
+  margin-top: auto;
+  margin-bottom: 12px;
+}
+
+/* ── Card Footer ── */
+.pv-project-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-soft-mist);
+}
+
+.pv-project-card__links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pv-project-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--color-carbon);
+  background: var(--color-paper-white);
+  color: var(--color-carbon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background 0.15s ease;
+  text-decoration: none;
+}
+
+.pv-project-icon-btn:hover {
+  background: var(--color-soft-mist);
+  transform: scale(1.08);
+}
+
+.pv-project-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pv-btn--danger-text {
+  color: var(--color-ember) !important;
+}
+
+.pv-btn--danger-text:hover {
+  background: #fee2e2 !important;
+}
+
+/* ── Project Filters ── */
+.pv-project-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: var(--sp-24);
+}
+
+.pv-project-filters__search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.pv-project-filters__search-icon {
+  position: absolute;
+  left: 14px;
+  pointer-events: none;
+  color: var(--color-carbon);
+  opacity: 0.5;
+}
+
+.pv-project-filters__search-input {
+  padding-left: 42px !important;
+  width: 100%;
+}
+
+.pv-project-filters__clear-search {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-carbon);
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+}
+
+.pv-project-filters__clear-search:hover {
+  opacity: 1;
+}
+
+.pv-project-filters__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.pv-project-filters__select-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-paper-white);
+  border: 1px solid var(--color-carbon);
+  border-radius: var(--r-2xl);
+  padding: 0 12px;
+}
+
+.pv-project-filters__select {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 8px 4px !important;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pv-project-filters__reset-btn {
+  margin-left: auto;
+}
+
+/* ── Project Modals & Details ── */
+.pv-project-form-modal {
+  max-width: 640px;
+}
+
+.pv-project-details-modal {
+  max-width: 680px;
+}
+
+.pv-project-details-modal__title-section {
+  flex: 1;
+}
+
+.pv-project-detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  padding: 10px 14px;
+  background: var(--color-sky-wash);
+  border-radius: var(--r-2xl);
+  border: 1px solid var(--color-carbon);
+  margin-bottom: 16px;
+}
+
+.pv-project-detail-section {
+  margin-bottom: 20px;
+}
+
+.pv-project-detail-heading {
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-carbon);
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.pv-project-detail-description {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--color-carbon);
+  white-space: pre-line;
+}
+
+.pv-project-detail-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pv-project-detail-timestamps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--color-carbon);
+  opacity: 0.65;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-soft-mist);
+}
+
+.pv-project-detail-time-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pv-project-details-actions {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.pv-project-details-actions__left {
+  display: flex;
+  gap: 8px;
+}
+
+.pv-project-details-actions__right {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── Featured Toggle in Form ── */
+.pv-featured-toggle-wrapper {
+  background: var(--color-soft-mist);
+  border: 1px solid var(--color-carbon);
+  border-radius: var(--r-2xl);
+  padding: 12px 16px;
+}
+
+.pv-featured-toggle-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.pv-featured-toggle-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pv-featured-toggle-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-carbon);
+}
+
+.pv-featured-toggle-desc {
+  font-size: 12px;
+  color: var(--color-carbon);
+  opacity: 0.7;
+}
+
+/* ── Skeletons ── */
+.pv-project-card--skeleton {
+  pointer-events: none;
+}
+
+

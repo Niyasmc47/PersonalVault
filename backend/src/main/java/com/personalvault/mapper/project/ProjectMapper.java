@@ -6,6 +6,10 @@ import com.personalvault.dto.project.UpdateProjectRequest;
 import com.personalvault.entity.project.Project;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class ProjectMapper {
 
@@ -15,16 +19,16 @@ public class ProjectMapper {
         }
 
         Project project = new Project();
-        project.setTitle(request.getTitle());
-        project.setDescription(request.getDescription());
+        project.setTitle(request.getTitle() != null ? request.getTitle().trim() : null);
+        project.setDescription(request.getDescription() != null ? request.getDescription().trim() : null);
         project.setCategory(request.getCategory());
         project.setStatus(request.getStatus());
         project.setStartDate(request.getStartDate());
         project.setEndDate(request.getEndDate());
-        project.setTechnologies(request.getTechnologies() != null ? request.getTechnologies() : new java.util.ArrayList<>());
-        project.setGithubUrl(request.getGithubUrl());
-        project.setLiveUrl(request.getLiveUrl());
-        project.setDemoUrl(request.getDemoUrl());
+        project.setTechnologies(cleanTechnologies(request.getTechnologies()));
+        project.setGithubUrl(request.getGithubUrl() != null && !request.getGithubUrl().isBlank() ? request.getGithubUrl().trim() : null);
+        project.setLiveUrl(request.getLiveUrl() != null && !request.getLiveUrl().isBlank() ? request.getLiveUrl().trim() : null);
+        project.setDemoUrl(request.getDemoUrl() != null && !request.getDemoUrl().isBlank() ? request.getDemoUrl().trim() : null);
         project.setFeatured(request.isFeatured());
         
         return project;
@@ -43,7 +47,7 @@ public class ProjectMapper {
         response.setStatus(project.getStatus());
         response.setStartDate(project.getStartDate());
         response.setEndDate(project.getEndDate());
-        response.setTechnologies(project.getTechnologies());
+        response.setTechnologies(project.getTechnologies() != null ? new ArrayList<>(project.getTechnologies()) : new ArrayList<>());
         response.setGithubUrl(project.getGithubUrl());
         response.setLiveUrl(project.getLiveUrl());
         response.setDemoUrl(project.getDemoUrl());
@@ -55,15 +59,15 @@ public class ProjectMapper {
     }
 
     public void updateEntityFromRequest(UpdateProjectRequest request, Project project) {
-        if (request == null) {
+        if (request == null || project == null) {
             return;
         }
 
         if (request.getTitle() != null) {
-            project.setTitle(request.getTitle());
+            project.setTitle(request.getTitle().trim());
         }
         if (request.getDescription() != null) {
-            project.setDescription(request.getDescription());
+            project.setDescription(request.getDescription().trim());
         }
         if (request.getCategory() != null) {
             project.setCategory(request.getCategory());
@@ -78,19 +82,30 @@ public class ProjectMapper {
             project.setEndDate(request.getEndDate());
         }
         if (request.getTechnologies() != null) {
-            project.setTechnologies(request.getTechnologies());
+            project.setTechnologies(cleanTechnologies(request.getTechnologies()));
         }
         if (request.getGithubUrl() != null) {
-            project.setGithubUrl(request.getGithubUrl());
+            project.setGithubUrl(!request.getGithubUrl().isBlank() ? request.getGithubUrl().trim() : null);
         }
         if (request.getLiveUrl() != null) {
-            project.setLiveUrl(request.getLiveUrl());
+            project.setLiveUrl(!request.getLiveUrl().isBlank() ? request.getLiveUrl().trim() : null);
         }
         if (request.getDemoUrl() != null) {
-            project.setDemoUrl(request.getDemoUrl());
+            project.setDemoUrl(!request.getDemoUrl().isBlank() ? request.getDemoUrl().trim() : null);
         }
         if (request.getFeatured() != null) {
             project.setFeatured(request.getFeatured());
         }
+    }
+
+    public List<String> cleanTechnologies(List<String> rawTechnologies) {
+        if (rawTechnologies == null) {
+            return new ArrayList<>();
+        }
+        return rawTechnologies.stream()
+                .filter(t -> t != null && !t.trim().isEmpty())
+                .map(String::trim)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

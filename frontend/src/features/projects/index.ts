@@ -1,2 +1,4 @@
-// Feature barrel for projects. Add exports here when implementing projects modules.
-export {}
+// Feature barrel for projects
+export { default as ProjectsPage } from './pages/ProjectsPage';
+export { projectService } from './services/projectService';
+export * from './types';
