@@ -40,6 +40,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     private final UserRepository userRepository;
     private final CertificateRepository certificateRepository;
     private final JwtService jwtService;
+    private final com.personalvault.service.vault.EncryptionService encryptionService;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final HttpClient httpClient;
 
@@ -58,11 +59,13 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     public GoogleDriveServiceImpl(UserGoogleDriveIntegrationRepository driveIntegrationRepository,
                                   UserRepository userRepository,
                                   CertificateRepository certificateRepository,
-                                  JwtService jwtService) {
+                                  JwtService jwtService,
+                                  com.personalvault.service.vault.EncryptionService encryptionService) {
         this.driveIntegrationRepository = driveIntegrationRepository;
         this.userRepository = userRepository;
         this.certificateRepository = certificateRepository;
         this.jwtService = jwtService;
+        this.encryptionService = encryptionService;
         this.httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(20))
                 .build();
@@ -277,6 +280,69 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     }
 
     @Override
+    @Transactional
+    public String uploadEncryptedVaultFile(User user, byte[] encryptedData, String customFileName, String mimeType, String subfolderName) throws IOException {
+        UserGoogleDriveIntegration integration = driveIntegrationRepository.findByUser(user)
+                .orElseThrow(() -> new InvalidRequestException("Google Drive is not connected. Please connect Google Drive first."));
+
+        String accessToken = getValidAccessToken(user, integration);
+        String folderId = ensureVaultSubfolderStructure(accessToken, integration, subfolderName);
+
+        String uploadMimeType = (mimeType != null && !mimeType.isBlank()) ? mimeType : "application/octet-stream";
+        String fileName = (customFileName != null && !customFileName.isBlank()) ? customFileName : "encrypted_document.bin";
+
+        String boundary = "===PersonalVaultBoundary" + System.currentTimeMillis() + "===";
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        // Part 1: Metadata JSON
+        String metadataJson = String.format("{\"name\":\"%s\",\"parents\":[\"%s\"]}", escapeJson(fileName), folderId);
+        baos.write(("--" + boundary + "\r\n").getBytes(StandardCharsets.UTF_8));
+        baos.write("Content-Type: application/json; charset=UTF-8\r\n\r\n".getBytes(StandardCharsets.UTF_8));
+        baos.write(metadataJson.getBytes(StandardCharsets.UTF_8));
+        baos.write("\r\n".getBytes(StandardCharsets.UTF_8));
+
+        // Part 2: Media
+        baos.write(("--" + boundary + "\r\n").getBytes(StandardCharsets.UTF_8));
+        baos.write(("Content-Type: " + uploadMimeType + "\r\n\r\n").getBytes(StandardCharsets.UTF_8));
+        baos.write(encryptedData);
+        baos.write("\r\n".getBytes(StandardCharsets.UTF_8));
+
+        // End boundary
+        baos.write(("--" + boundary + "--\r\n").getBytes(StandardCharsets.UTF_8));
+
+        byte[] requestBody = baos.toByteArray();
+
+        try {
+            HttpRequest uploadRequest = HttpRequest.newBuilder()
+                    .uri(URI.create("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,mimeType,size"))
+                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Content-Type", "multipart/related; boundary=" + boundary)
+                    .POST(HttpRequest.BodyPublishers.ofByteArray(requestBody))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(uploadRequest, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                throw new InvalidRequestException("Google Drive vault file upload failed with status " + response.statusCode() + ": " + response.body());
+            }
+
+            JsonNode responseJson = objectMapper.readTree(response.body());
+            String fileId = responseJson.path("id").asText(null);
+
+            if (fileId == null || fileId.isBlank()) {
+                throw new InvalidRequestException("Google Drive vault upload did not return a valid file ID");
+            }
+
+            return fileId;
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new InvalidRequestException("Vault upload interrupted: " + e.getMessage());
+        }
+    }
+
+    @Override
     public byte[] downloadFileBytes(User user, String googleDriveFileId) {
         if (googleDriveFileId == null || googleDriveFileId.isBlank()) {
             throw new ResourceNotFoundException("Google Drive file ID is required");
@@ -308,6 +374,12 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
             Thread.currentThread().interrupt();
             throw new InvalidRequestException("Failed to stream certificate from Google Drive: " + e.getMessage());
         }
+    }
+
+    @Override
+    public byte[] downloadEncryptedVaultFileBytes(User user, String googleDriveFileId) {
+        byte[] rawBytes = downloadFileBytes(user, googleDriveFileId);
+        return encryptionService.decryptBytes(rawBytes);
     }
 
     @Override
@@ -418,6 +490,39 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
         } catch (Exception e) {
             throw new InvalidRequestException("Failed to initialize Google Drive folder structure: " + e.getMessage());
+        }
+    }
+
+    @Transactional
+    public String ensureVaultSubfolderStructure(String accessToken, UserGoogleDriveIntegration integration, String subfolderName) {
+        try {
+            // 1. Locate or create PersonalVault root folder
+            String pvFolderId = integration.getPersonalVaultFolderId();
+            if (pvFolderId == null || !isFolderValid(accessToken, pvFolderId)) {
+                pvFolderId = findFolder(accessToken, "PersonalVault", "root");
+                if (pvFolderId == null) {
+                    pvFolderId = createFolder(accessToken, "PersonalVault", "root");
+                }
+                integration.setPersonalVaultFolderId(pvFolderId);
+                driveIntegrationRepository.save(integration);
+            }
+
+            // 2. Locate or create SecureVault subfolder
+            String secureVaultFolderId = findFolder(accessToken, "SecureVault", pvFolderId);
+            if (secureVaultFolderId == null) {
+                secureVaultFolderId = createFolder(accessToken, "SecureVault", pvFolderId);
+            }
+
+            // 3. Locate or create requested category subfolder under SecureVault
+            String safeSubfolderName = (subfolderName != null && !subfolderName.isBlank()) ? subfolderName.trim() : "Other Documents";
+            String targetFolderId = findFolder(accessToken, safeSubfolderName, secureVaultFolderId);
+            if (targetFolderId == null) {
+                targetFolderId = createFolder(accessToken, safeSubfolderName, secureVaultFolderId);
+            }
+
+            return targetFolderId;
+        } catch (Exception e) {
+            throw new InvalidRequestException("Failed to initialize Secure Vault folder structure in Google Drive: " + e.getMessage());
         }
     }
 

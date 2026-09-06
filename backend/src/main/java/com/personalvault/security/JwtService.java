@@ -87,8 +87,31 @@ public class JwtService {
                 return null;
             }
             return claims.getSubject();
+    public String generateVaultSessionToken(String email, long durationMillis) {
+        return Jwts.builder()
+                .subject(email)
+                .claim("type", "vault_session")
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + durationMillis))
+                .signWith(getSignInKey())
+                .compact();
+    }
+
+    public boolean isVaultSessionTokenValid(String vaultToken, String userEmail) {
+        if (vaultToken == null || vaultToken.isBlank() || userEmail == null) {
+            return false;
+        }
+        try {
+            Claims claims = extractAllClaims(vaultToken);
+            if (!"vault_session".equals(claims.get("type"))) {
+                return false;
+            }
+            if (claims.getExpiration().before(new Date())) {
+                return false;
+            }
+            return userEmail.equalsIgnoreCase(claims.getSubject());
         } catch (Exception e) {
-            return null;
+            return false;
         }
     }
 
