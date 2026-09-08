@@ -21,7 +21,11 @@ public interface GoogleDriveService {
 
     String uploadCertificateFile(User user, MultipartFile file, String customFileName) throws IOException;
 
+    String uploadEncryptedVaultFile(User user, byte[] encryptedData, String customFileName, String mimeType, String subfolderName) throws IOException;
+
     byte[] downloadFileBytes(User user, String googleDriveFileId);
+
+    byte[] downloadEncryptedVaultFileBytes(User user, String googleDriveFileId);
 
     Resource downloadFileResource(User user, String googleDriveFileId);
 
