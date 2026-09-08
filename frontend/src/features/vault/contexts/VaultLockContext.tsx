@@ -29,24 +29,26 @@ export function VaultLockProvider({ children }: { children: ReactNode }) {
   const [autoLockMinutes, setAutoLockMinutes] = useState<number>(15);
   const [activeTab, setActiveTab] = useState<VaultTab>('passwords');
 
-  const lastActivityRef = useRef<number>(Date.now());
+  const lastActivityRef = useRef<number>(0);
+  
   const autoLockTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const refreshStatus = useCallback(async () => {
-    try {
-      const status = await vaultService.getStatus(vaultToken);
+  const refreshStatus = useCallback(() => {
+    return vaultService.getStatus(vaultToken).then(status => {
       setIsConfigured(status.configured);
       setIsUnlocked(status.unlocked);
       setPasswordHint(status.passwordHint);
       if (status.autoLockMinutes) {
         setAutoLockMinutes(status.autoLockMinutes);
       }
-    } catch {
+      setIsLoading(false);
+      lastActivityRef.current = Date.now();
+    }).catch(() => {
       setIsConfigured(false);
       setIsUnlocked(false);
-    } finally {
       setIsLoading(false);
-    }
+      lastActivityRef.current = Date.now();
+    });
   }, [vaultToken]);
 
   useEffect(() => {

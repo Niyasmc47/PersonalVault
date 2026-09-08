@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useVaultLock } from '../contexts/VaultLockContext';
+import { useVaultLock, VaultLockProvider } from '../contexts/VaultLockContext';
 import { vaultService } from '../services/vaultService';
 import type {
   CredentialItem,
@@ -29,7 +29,7 @@ import FinancialFormModal from '../components/FinancialFormModal';
 import DocumentFormModal from '../components/DocumentFormModal';
 import { Loader2 } from 'lucide-react';
 
-export default function VaultPage() {
+function VaultPageContent() {
   const { isConfigured, isUnlocked, isLoading, activeTab, setActiveTab } = useVaultLock();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -65,54 +65,39 @@ export default function VaultPage() {
   const [itemToDelete, setItemToDelete] = useState<{ type: string; id: number; name: string } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const fetchCredentials = useCallback(async () => {
+  const fetchCredentials = useCallback(() => {
     if (!isUnlocked) return;
-    try {
-      const data = await vaultService.getCredentials();
+    vaultService.getCredentials().then(data => {
       setCredentials(data);
-    } catch (err) {
-      console.error(err);
-    }
+    }).catch(err => console.error(err));
   }, [isUnlocked]);
 
-  const fetchIdentities = useCallback(async () => {
+  const fetchIdentities = useCallback(() => {
     if (!isUnlocked) return;
-    try {
-      const data = await vaultService.getIdentityDocuments();
+    vaultService.getIdentityDocuments().then(data => {
       setIdentities(data);
-    } catch (err) {
-      console.error(err);
-    }
+    }).catch(err => console.error(err));
   }, [isUnlocked]);
 
-  const fetchFinancials = useCallback(async () => {
+  const fetchFinancials = useCallback(() => {
     if (!isUnlocked) return;
-    try {
-      const data = await vaultService.getFinancialAccounts();
+    vaultService.getFinancialAccounts().then(data => {
       setFinancials(data);
-    } catch (err) {
-      console.error(err);
-    }
+    }).catch(err => console.error(err));
   }, [isUnlocked]);
 
-  const fetchEducations = useCallback(async () => {
+  const fetchEducations = useCallback(() => {
     if (!isUnlocked) return;
-    try {
-      const data = await vaultService.getDocuments('EDUCATION');
+    vaultService.getDocuments('EDUCATION').then(data => {
       setEducations(data);
-    } catch (err) {
-      console.error(err);
-    }
+    }).catch(err => console.error(err));
   }, [isUnlocked]);
 
-  const fetchOthers = useCallback(async () => {
+  const fetchOthers = useCallback(() => {
     if (!isUnlocked) return;
-    try {
-      const data = await vaultService.getDocuments('OTHER');
+    vaultService.getDocuments('OTHER').then(data => {
       setOthers(data);
-    } catch (err) {
-      console.error(err);
-    }
+    }).catch(err => console.error(err));
   }, [isUnlocked]);
 
   // Fetch active tab data
@@ -359,5 +344,13 @@ export default function VaultPage() {
         onCancel={() => setDeleteOpen(false)}
       />
     </div>
+  );
+}
+
+export default function VaultPage() {
+  return (
+    <VaultLockProvider>
+      <VaultPageContent />
+    </VaultLockProvider>
   );
 }

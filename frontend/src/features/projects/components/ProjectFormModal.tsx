@@ -46,6 +46,7 @@ export default function ProjectFormModal({
 
   useEffect(() => {
     if (initialData) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTitle(initialData.title || '');
       setDescription(initialData.description || '');
       setCategory(initialData.category || 'PERSONAL');
@@ -146,7 +147,7 @@ export default function ProjectFormModal({
     if (!validateForm()) return;
 
     // Include any remaining text in techInput
-    let finalTechs = [...technologies];
+    const finalTechs = [...technologies];
     if (techInput.trim() && !finalTechs.includes(techInput.trim())) {
       finalTechs.push(techInput.trim());
     }

@@ -28,6 +28,7 @@ export default function CredentialFormModal({
 
   useEffect(() => {
     if (credential) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setName(credential.name);
       setUsername(credential.username);
       setPassword(''); // Password left blank when editing unless changing

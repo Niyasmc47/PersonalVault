@@ -85,7 +85,7 @@ public class FinancialAccountResponse {
     }
 
     public void setHasTaxInfo(boolean hasTaxInfo) {
-        this.hasTaxInfo = taxInfo;
+        this.hasTaxInfo = hasTaxInfo;
     }
 
     public boolean isHasNotes() {

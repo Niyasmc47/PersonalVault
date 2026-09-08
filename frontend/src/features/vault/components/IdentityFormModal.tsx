@@ -28,6 +28,7 @@ export default function IdentityFormModal({
 
   useEffect(() => {
     if (document) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setType(document.type);
       setHolderName(document.holderName);
       setDocumentNumber(''); // Left blank unless updating

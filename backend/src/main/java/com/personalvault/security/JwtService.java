@@ -87,6 +87,11 @@ public class JwtService {
                 return null;
             }
             return claims.getSubject();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public String generateVaultSessionToken(String email, long durationMillis) {
         return Jwts.builder()
                 .subject(email)

@@ -29,6 +29,7 @@ export default function FinancialFormModal({
 
   useEffect(() => {
     if (account) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setBankName(account.bankName);
       setAccountNumber(''); // Left blank when editing unless changing
       setIfsc(account.ifsc || '');

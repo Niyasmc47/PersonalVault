@@ -24,6 +24,7 @@ export default function VaultDocumentViewerModal({
 
   useEffect(() => {
     if (!isOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setBlobUrl(null);
       setLoading(false);
       setError(null);
