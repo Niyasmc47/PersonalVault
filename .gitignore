@@ -32,3 +32,6 @@ Thumbs.db
 /.ripgreprc
 /.zprofile
 /.zshrc
+
+# Design documents
+DESIGN.md
