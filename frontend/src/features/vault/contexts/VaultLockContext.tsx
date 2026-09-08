@@ -30,7 +30,7 @@ export function VaultLockProvider({ children }: { children: ReactNode }) {
   const [activeTab, setActiveTab] = useState<VaultTab>('passwords');
 
   const lastActivityRef = useRef<number>(Date.now());
-  const autoLockTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const autoLockTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const refreshStatus = useCallback(async () => {
     try {

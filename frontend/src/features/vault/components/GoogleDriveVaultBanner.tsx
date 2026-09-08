@@ -16,7 +16,7 @@ export default function GoogleDriveVaultBanner() {
         if (active) setDriveStatus(status);
       })
       .catch(() => {
-        if (active) setDriveStatus({ connected: false });
+        if (active) setDriveStatus({ connected: false, certificatesCount: 0 });
       })
       .finally(() => {
         if (active) setLoading(false);

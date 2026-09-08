@@ -11,9 +11,9 @@ import {
   Edit3,
   Trash2,
   FileText,
-  CreditCard,
-  QrCode,
-  Landmark,
+  
+  
+  
 } from 'lucide-react';
 
 interface FinancialCardProps {
