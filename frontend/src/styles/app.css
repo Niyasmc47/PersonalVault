@@ -2597,8 +2597,8 @@
 
 @media print {
   @page {
-    size: A4 portrait;
-    margin: 10mm 12mm;
+    size: auto;
+    margin: 0 !important;
   }
 
   /* Hide all website chrome, navbars, buttons, split editors */
@@ -2606,6 +2606,8 @@
     background: #ffffff !important;
     margin: 0 !important;
     padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   .pv-header,
@@ -2632,7 +2634,7 @@
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;
-    background: transparent !important;
+    background: #ffffff !important;
     box-shadow: none !important;
   }
 
@@ -2644,11 +2646,19 @@
     transform: none !important;
     margin: 0 !important;
     padding: 0 !important;
+    background: #ffffff !important;
   }
 
   .pv-resume-sheet {
-    padding: 0 !important;
+    padding: 12mm 16mm !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    border: none !important;
     color: #000000 !important;
+    background: #ffffff !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   .pv-resume-section,

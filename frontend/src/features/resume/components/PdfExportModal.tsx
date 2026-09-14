@@ -79,7 +79,8 @@ export default function PdfExportModal({
               <li><strong>Pages:</strong> All</li>
               <li><strong>Layout:</strong> Portrait</li>
               <li><strong>Paper size:</strong> A4 or Letter</li>
-              <li><strong>Options:</strong> Check "Background graphics"</li>
+              <li><strong>Headers & Footers:</strong> <span style={{ color: 'var(--color-ember)', fontWeight: 700 }}>Uncheck</span> "Headers and footers" (removes file names & timestamps)</li>
+              <li><strong>Background graphics:</strong> <span style={{ color: 'var(--color-mint-pop)', fontWeight: 700 }}>Check</span> "Background graphics"</li>
             </ul>
           </div>
         </div>
