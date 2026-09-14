@@ -1,2 +1,3 @@
-// Feature barrel for resume. Add exports here when implementing resume modules.
-export {}
+export { default as ResumePage } from './pages/ResumePage';
+export * from './types';
+export * from './services/resumeService';

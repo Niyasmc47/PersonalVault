@@ -1,2 +1,3 @@
-// Feature barrel for achievements. Add exports here when implementing achievements modules.
-export {}
+export { default as AchievementsPage } from './pages/AchievementsPage';
+export * from './types';
+export * from './services/achievementService';

@@ -19,4 +19,9 @@ public class AppConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
+    @Bean
+    public com.fasterxml.jackson.databind.ObjectMapper objectMapper() {
+        return new com.fasterxml.jackson.databind.ObjectMapper();
+    }
 }

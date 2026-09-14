@@ -1,2 +1,3 @@
-// Feature barrel for skills. Add exports here when implementing skills modules.
-export {}
+export { default as SkillsPage } from './pages/SkillsPage';
+export * from './types';
+export * from './services/skillService';

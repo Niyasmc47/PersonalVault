@@ -1965,4 +1965,700 @@
   pointer-events: none;
 }
 
+/* ============================================================
+   Skills Feature Styles
+   ============================================================ */
+
+.pv-skill-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+  transition: transform 0.15s ease;
+}
+.pv-skill-card:hover {
+  transform: translateY(-2px);
+}
+
+.pv-skill-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pv-skill-card__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pv-skill-card__name {
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+}
+
+.pv-skill-card__badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pv-skill-card__featured-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--color-sunburst);
+  color: var(--color-carbon);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  padding: 3px 8px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--color-carbon);
+  cursor: pointer;
+}
+
+.pv-skill-card__resume-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--color-sky-wash);
+  color: var(--color-carbon);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  padding: 3px 8px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--color-carbon);
+  cursor: pointer;
+}
+
+.pv-skill-card__tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pv-skill-card__category {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--color-carbon);
+}
+
+.pv-skill-card__proficiency {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--color-carbon);
+}
+
+.pv-skill-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-carbon);
+  opacity: 0.8;
+}
+
+.pv-skill-card__description {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--color-carbon);
+  opacity: 0.85;
+}
+
+.pv-skill-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-soft-mist);
+}
+
+/* ============================================================
+   Social Links Feature Styles
+   ============================================================ */
+
+.pv-social-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  gap: 16px;
+  transition: transform 0.15s ease;
+}
+.pv-social-card:hover {
+  transform: translateY(-2px);
+}
+
+.pv-social-card__left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.pv-social-card__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--color-carbon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pv-social-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pv-social-card__label {
+  font-size: 16px;
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+}
+
+.pv-social-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ============================================================
+   Resume Builder Styles
+   ============================================================ */
+
+.pv-resume-page {
+  padding-bottom: 60px;
+}
+
+.pv-resume-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: var(--sp-48);
+  margin-bottom: var(--sp-24);
+  flex-wrap: wrap;
+}
+
+.pv-resume-topbar__left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pv-resume-topbar__title {
+  font-family: var(--font-lateral);
+  font-size: clamp(24px, 3.5vw, 36px);
+  line-height: 1;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.pv-resume-topbar__meta {
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.8;
+  margin-top: 4px;
+}
+
+.pv-resume-topbar__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── Split Layout ────────────────────────────────────────── */
+.pv-resume-split-layout {
+  display: grid;
+  grid-template-columns: 480px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .pv-resume-split-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pv-resume-editor-panel {
+  background: var(--surface-paper-white);
+  border: 1px solid var(--color-carbon);
+  border-radius: var(--r-2xl-2);
+  padding: 20px;
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+}
+
+.pv-resume-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--color-carbon);
+}
+
+.pv-resume-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-aeonik-pro);
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  padding: 8px 12px;
+  border-radius: var(--r-full);
+  border: 1px solid transparent;
+  background: var(--color-soft-mist);
+  color: var(--color-carbon);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.pv-resume-tab-btn:hover {
+  background: var(--color-sky-wash);
+}
+.pv-resume-tab-btn--active {
+  background: var(--color-carbon);
+  color: var(--color-paper-white);
+  border-color: var(--color-carbon);
+}
+
+.pv-editor-section-title {
+  font-size: 16px;
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 12px 0;
+}
+
+/* ── Preview Panel ───────────────────────────────────────── */
+.pv-resume-preview-panel {
+  background: var(--surface-concrete-gray);
+  border: 1px solid var(--color-carbon);
+  border-radius: var(--r-2xl-2);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 800px;
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+}
+
+.pv-resume-preview-toolbar {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 8px 16px;
+  background: var(--surface-paper-white);
+  border: 1px solid var(--color-carbon);
+  border-radius: var(--r-full);
+}
+
+.pv-resume-preview-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.pv-resume-sheet-container {
+  width: 210mm;
+  min-height: 297mm;
+  background: #ffffff;
+  border: 1px solid #000000;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  margin-bottom: 30px;
+  transition: transform 0.2s ease;
+}
+
+/* ── Resume Sheet Interiors ──────────────────────────────── */
+.pv-resume-sheet {
+  padding: 18mm 20mm;
+  box-sizing: border-box;
+  color: #111827;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 10pt;
+  line-height: 1.45;
+}
+
+/* 1. Professional Template */
+.pv-resume-header--professional {
+  text-align: center;
+  border-bottom: 2px solid #000000;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.pv-resume-name {
+  font-size: 22pt;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.pv-resume-headline {
+  font-size: 11pt;
+  font-weight: 600;
+  margin-top: 4px;
+  color: #374151;
+}
+
+.pv-resume-contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+  font-size: 9pt;
+  color: #4b5563;
+}
+
+.pv-resume-contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.pv-resume-contact-item a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.pv-resume-section {
+  margin-bottom: 14px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.pv-resume-section__title {
+  font-size: 11pt;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+  color: #000000;
+}
+
+.pv-resume-section__divider {
+  height: 1px;
+  background: #000000;
+  margin: 4px 0 8px 0;
+}
+
+.pv-resume-text {
+  font-size: 9.5pt;
+  line-height: 1.45;
+  color: #1f2937;
+  margin: 0;
+}
+
+.pv-resume-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pv-resume-item {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.pv-resume-item__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 10pt;
+  margin-bottom: 2px;
+}
+
+.pv-resume-item__title {
+  font-weight: 700;
+  color: #000000;
+}
+
+.pv-resume-item__subtitle {
+  font-weight: 600;
+  color: #374151;
+}
+
+.pv-resume-item__date {
+  font-size: 9pt;
+  font-weight: 600;
+  color: #4b5563;
+  white-space: nowrap;
+}
+
+.pv-resume-item__meta {
+  font-size: 8.5pt;
+  color: #4b5563;
+  margin-bottom: 2px;
+}
+
+.pv-resume-item__tech {
+  font-size: 9pt;
+  font-style: italic;
+  color: #4b5563;
+}
+
+.pv-resume-bullets {
+  margin: 4px 0 0 0;
+  padding-left: 18px;
+  font-size: 9.5pt;
+}
+
+.pv-resume-link-row {
+  margin-top: 2px;
+}
+.pv-resume-link {
+  font-size: 8.5pt;
+  color: #2563eb;
+  text-decoration: underline;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.pv-resume-skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pv-resume-skill-group {
+  font-size: 9.5pt;
+  line-height: 1.4;
+}
+
+.pv-resume-skill-group__name {
+  font-weight: 700;
+  color: #000000;
+}
+
+/* 2. Modern Template Additions */
+.pv-resume-header--modern {
+  border-bottom: 3px solid var(--color-electric-blue);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.pv-resume-modern-title {
+  font-size: 11pt;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 4px;
+}
+
+.pv-resume-skills-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pv-resume-skill-pill {
+  font-size: 8.5pt;
+  font-weight: 600;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  padding: 2px 10px;
+  color: #111827;
+}
+
+.pv-resume-tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.pv-resume-tech-tag {
+  font-size: 8pt;
+  font-weight: 600;
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* 3. Minimal Template Additions */
+.pv-resume-sheet--minimal {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding: 20mm;
+}
+
+.pv-resume-header--minimal {
+  border-bottom: 1px solid #000;
+  padding-bottom: 12px;
+}
+
+.pv-resume-minimal-title {
+  font-size: 9pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 0 8px 0;
+  color: #000;
+}
+
+/* 4. ATS Friendly Template */
+.pv-resume-sheet--ats {
+  font-family: Arial, Calibri, sans-serif;
+  padding: 15mm;
+  color: #000000;
+}
+
+.pv-resume-ats-section {
+  margin-bottom: 12px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.pv-resume-ats-heading {
+  font-size: 11pt;
+  font-weight: bold;
+  margin: 0;
+  color: #000000;
+}
+
+.pv-resume-ats-hr {
+  border: none;
+  border-top: 1px solid #000000;
+  margin: 2px 0 6px 0;
+}
+
+.pv-resume-ats-text {
+  font-size: 10pt;
+  line-height: 1.4;
+  margin: 0 0 4px 0;
+}
+
+.pv-resume-ats-item {
+  margin-bottom: 8px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.pv-resume-ats-item-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10pt;
+}
+
+.pv-resume-ats-date {
+  font-size: 9.5pt;
+}
+
+.pv-resume-ats-bullets {
+  margin: 2px 0 0 0;
+  padding-left: 20px;
+  font-size: 10pt;
+}
+
+/* 5. Academic Template */
+.pv-resume-sheet--academic {
+  font-family: "Times New Roman", Times, Georgia, serif;
+  padding: 20mm;
+}
+
+.pv-resume-academic-title {
+  font-family: "Times New Roman", Times, Georgia, serif;
+  font-size: 12pt;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #000000;
+  padding-bottom: 2px;
+  margin: 0 0 8px 0;
+}
+
+/* ============================================================
+   Native Print / Vector PDF Styles (@media print)
+   ============================================================ */
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm 12mm;
+  }
+
+  /* Hide all website chrome, navbars, buttons, split editors */
+  body, html {
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .pv-header,
+  .pv-footer,
+  .pv-marquee,
+  .pv-resume-topbar,
+  .pv-resume-editor-panel,
+  .pv-resume-preview-toolbar,
+  .pv-modal-overlay,
+  .pv-btn,
+  #root > div > header,
+  #root > div > footer {
+    display: none !important;
+  }
+
+  .pv-container,
+  .pv-resume-page,
+  .pv-resume-split-layout,
+  .pv-resume-preview-panel,
+  .pv-resume-preview-wrapper {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .pv-resume-sheet-container {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    min-height: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .pv-resume-sheet {
+    padding: 0 !important;
+    color: #000000 !important;
+  }
+
+  .pv-resume-section,
+  .pv-resume-item,
+  .pv-resume-ats-item,
+  .pv-resume-modern-item {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+}
+
+
 
