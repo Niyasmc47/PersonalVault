@@ -4,6 +4,8 @@ PersonalVault is a secure, all-in-one personal digital management platform built
 
 ## 🚀 Current Features
 
+
+
 ### 🔒 Secure Vault
 A deeply integrated, high-security digital vault for your most sensitive information.
 - **AES-256-GCM Encryption**: All sensitive data is encrypted before saving. 
