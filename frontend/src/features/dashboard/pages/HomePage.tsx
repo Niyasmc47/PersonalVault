@@ -92,7 +92,7 @@ export default function HomePage() {
 
           <div className="pv-features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
 
-            <Link to="/vault" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
+            <Link to="/vault" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)' }}>
               <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
                 <Lock size={22} color="var(--color-carbon)" strokeWidth={2.5} />
               </div>
@@ -100,7 +100,7 @@ export default function HomePage() {
               <div className="pv-feature-card__desc">Store and manage sensitive personal information with encryption-level security.</div>
             </Link>
 
-            <Link to="/expenses" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
+            <Link to="/expenses" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)' }}>
               <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
                 <Wallet size={22} color="var(--color-carbon)" strokeWidth={2.5} />
               </div>
@@ -108,7 +108,7 @@ export default function HomePage() {
               <div className="pv-feature-card__desc">Track daily expenses, set budgets, and gain insights into your spending habits.</div>
             </Link>
 
-            <Link to="/skills" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
+            <Link to="/skills" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)' }}>
               <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
                 <Award size={22} color="var(--color-carbon)" strokeWidth={2.5} />
               </div>
@@ -116,7 +116,7 @@ export default function HomePage() {
               <div className="pv-feature-card__desc">Catalog your technical and soft skills with proficiency levels.</div>
             </Link>
 
-            <Link to="/projects" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
+            <Link to="/projects" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)' }}>
               <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
                 <Briefcase size={22} color="var(--color-carbon)" strokeWidth={2.5} />
               </div>
@@ -124,7 +124,7 @@ export default function HomePage() {
               <div className="pv-feature-card__desc">Organize academic and personal projects with status tracking.</div>
             </Link>
 
-            <Link to="/achievements" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
+            <Link to="/achievements" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)' }}>
               <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
                 <Trophy size={22} color="var(--color-carbon)" strokeWidth={2.5} />
               </div>
@@ -132,7 +132,7 @@ export default function HomePage() {
               <div className="pv-feature-card__desc">Record awards, hackathon wins, and professional milestones.</div>
             </Link>
 
-            <Link to="/certificates" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
+            <Link to="/certificates" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)' }}>
               <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
                 <GraduationCap size={22} color="var(--color-carbon)" strokeWidth={2.5} />
               </div>
@@ -140,7 +140,7 @@ export default function HomePage() {
               <div className="pv-feature-card__desc">Manage certifications and credentials with verification links.</div>
             </Link>
 
-            <Link to="/social" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)', borderRadius: '40px' }}>
+            <Link to="/social" className="pv-feature-card" style={{ background: 'var(--color-soft-mist)' }}>
               <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
                 <LinkIcon size={22} color="var(--color-carbon)" strokeWidth={2.5} />
               </div>
@@ -148,7 +148,7 @@ export default function HomePage() {
               <div className="pv-feature-card__desc">Consolidate GitHub, LinkedIn, and professional profile links.</div>
             </Link>
 
-            <Link to="/resume" className="pv-feature-card" style={{ background: 'var(--color-electric-blue)', color: 'var(--color-paper-white)', borderRadius: '40px' }}>
+            <Link to="/resume" className="pv-feature-card" style={{ background: 'var(--color-electric-blue)', color: 'var(--color-paper-white)' }}>
               <div className="pv-feature-card__icon" style={{ background: 'var(--color-paper-white)' }}>
                 <FileText size={22} color="var(--color-carbon)" strokeWidth={2.5} />
               </div>

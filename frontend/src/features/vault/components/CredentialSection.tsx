@@ -62,7 +62,7 @@ export default function CredentialSection({
 
       {/* Grid of Cards */}
       {filtered.length > 0 ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '24px' }}>
           {filtered.map((cred) => (
             <CredentialCard key={cred.id} credential={cred} onEdit={onEdit} onDelete={onDelete} />
           ))}

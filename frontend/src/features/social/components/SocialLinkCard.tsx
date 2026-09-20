@@ -86,7 +86,7 @@ export default function SocialLinkCard({
   };
 
   return (
-    <div className="pv-card pv-social-card">
+    <div className="pv-social-card">
       <div className="pv-social-card__left">
         <div
           className="pv-social-card__icon"

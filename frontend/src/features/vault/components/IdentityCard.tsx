@@ -12,7 +12,6 @@ import {
   Trash2,
   Calendar,
   FileText,
-  User,
 } from 'lucide-react';
 
 interface IdentityCardProps {
@@ -80,76 +79,50 @@ export default function IdentityCard({ document, onEdit, onDelete, onPreview }: 
   };
 
   return (
-    <div className="pv-card" style={{ padding: '24px', borderRadius: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div className="pv-vault-card">
       {/* Top Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div className="pv-vault-card__top">
+        <div className="pv-vault-card__header-main">
           <div
-            style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: getTypeColor(document.type),
-              border: '1px solid var(--color-carbon)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
+            className="pv-vault-card__icon"
+            style={{ background: getTypeColor(document.type) }}
           >
-            <FileCheck2 size={18} color="var(--color-carbon)" />
+            <FileCheck2 size={20} color="var(--color-carbon)" />
           </div>
-          <div>
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                padding: '2px 8px',
-                borderRadius: '1600px',
-                border: '1px solid var(--color-carbon)',
-                background: getTypeColor(document.type),
-                display: 'inline-block',
-                marginBottom: '4px',
-              }}
-            >
+          <div className="pv-vault-card__titles">
+            <h3 className="pv-vault-card__title" title={document.holderName}>
+              {document.holderName}
+            </h3>
+            <span className="pv-vault-card__subtitle">
               {formatTypeName(document.type)}
             </span>
-            <h3 style={{ fontSize: '17px', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <User size={14} color="#666" />
-              <span>{document.holderName}</span>
-            </h3>
           </div>
         </div>
+
+        <span
+          className="pv-vault-card__badge"
+          style={{ background: getTypeColor(document.type) }}
+        >
+          {formatTypeName(document.type)}
+        </span>
       </div>
 
       {/* Masked / Revealed Document Number */}
-      <div
-        style={{
-          background: 'var(--color-soft-mist)',
-          padding: '10px 16px',
-          borderRadius: '16px',
-          border: '1px solid var(--color-carbon)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '8px',
-        }}
-      >
-        <div>
-          <span style={{ fontSize: '11px', color: '#666', display: 'block', textTransform: 'uppercase', fontWeight: 600 }}>
+      <div className="pv-vault-card__secret-box">
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <span style={{ fontSize: '11px', color: '#666', display: 'block', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em', marginBottom: '2px' }}>
             Document Number
           </span>
-          <span style={{ fontFamily: 'monospace', fontSize: '15px', fontWeight: 700, letterSpacing: '0.5px' }}>
+          <span className="pv-vault-card__secret-text">
             {revealed ? revealed.documentNumber : document.maskedNumber}
           </span>
         </div>
 
-        <div style={{ display: 'flex', gap: '6px' }}>
+        <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
           <button
             type="button"
             className="pv-btn pv-btn--light pv-btn--sm"
-            style={{ padding: '4px 8px', borderRadius: '1200px' }}
+            style={{ padding: '4px 8px' }}
             onClick={handleToggleReveal}
             disabled={isRevealing}
             title={revealed ? 'Hide number' : 'Reveal full number'}
@@ -161,7 +134,7 @@ export default function IdentityCard({ document, onEdit, onDelete, onPreview }: 
             <button
               type="button"
               className="pv-btn pv-btn--light pv-btn--sm"
-              style={{ padding: '4px 8px', borderRadius: '1200px' }}
+              style={{ padding: '4px 8px' }}
               onClick={() => handleCopy(revealed.documentNumber)}
               title="Copy document number"
             >
@@ -173,16 +146,16 @@ export default function IdentityCard({ document, onEdit, onDelete, onPreview }: 
 
       {/* Dates Metadata */}
       {(document.issueDate || document.expiryDate) && (
-        <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: '#555' }}>
+        <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: '#444' }}>
           {document.issueDate && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Calendar size={13} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Calendar size={14} />
               <span>Issued: {document.issueDate}</span>
             </div>
           )}
           {document.expiryDate && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Calendar size={13} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Calendar size={14} />
               <span>Expires: {document.expiryDate}</span>
             </div>
           )}
@@ -195,7 +168,7 @@ export default function IdentityCard({ document, onEdit, onDelete, onPreview }: 
           <button
             type="button"
             className="pv-btn pv-btn--light pv-btn--sm"
-            style={{ borderRadius: '1600px', fontSize: '12px' }}
+            style={{ fontSize: '12px' }}
             onClick={() => {
               if (!vaultToken) return;
               onPreview(
@@ -207,7 +180,7 @@ export default function IdentityCard({ document, onEdit, onDelete, onPreview }: 
             }}
           >
             <FileText size={13} />
-            <span>View Front</span>
+            <span>View Front Scan</span>
           </button>
         )}
 
@@ -215,7 +188,7 @@ export default function IdentityCard({ document, onEdit, onDelete, onPreview }: 
           <button
             type="button"
             className="pv-btn pv-btn--light pv-btn--sm"
-            style={{ borderRadius: '1600px', fontSize: '12px' }}
+            style={{ fontSize: '12px' }}
             onClick={() => {
               if (!vaultToken) return;
               onPreview(
@@ -227,7 +200,7 @@ export default function IdentityCard({ document, onEdit, onDelete, onPreview }: 
             }}
           >
             <FileText size={13} />
-            <span>View Back</span>
+            <span>View Back Scan</span>
           </button>
         )}
 
@@ -240,18 +213,17 @@ export default function IdentityCard({ document, onEdit, onDelete, onPreview }: 
 
       {/* Revealed Notes */}
       {revealed?.notes && (
-        <div style={{ background: '#fafafa', padding: '10px', borderRadius: '12px', border: '1px dashed var(--color-carbon)', fontSize: '12px' }}>
-          <strong>Notes:</strong>
-          <p style={{ margin: '4px 0 0', whiteSpace: 'pre-wrap' }}>{revealed.notes}</p>
+        <div className="pv-vault-card__revealed-box">
+          <strong style={{ display: 'block', marginBottom: '4px' }}>Notes:</strong>
+          <p style={{ margin: 0, whiteSpace: 'pre-wrap', color: '#333' }}>{revealed.notes}</p>
         </div>
       )}
 
       {/* Card Actions */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', borderTop: '1px solid #eee', paddingTop: '12px' }}>
+      <div className="pv-vault-card__footer">
         <button
           type="button"
           className="pv-btn pv-btn--light pv-btn--sm"
-          style={{ padding: '6px 12px', borderRadius: '1600px' }}
           onClick={() => onEdit(document)}
         >
           <Edit3 size={14} />
@@ -260,11 +232,10 @@ export default function IdentityCard({ document, onEdit, onDelete, onPreview }: 
 
         <button
           type="button"
-          className="pv-btn pv-btn--light pv-btn--sm"
-          style={{ padding: '6px 12px', borderRadius: '1600px' }}
+          className="pv-btn pv-btn--ghost pv-btn--sm pv-btn--danger"
           onClick={() => onDelete(document)}
         >
-          <Trash2 size={14} color="var(--color-ember)" />
+          <Trash2 size={14} />
           <span>Delete</span>
         </button>
       </div>

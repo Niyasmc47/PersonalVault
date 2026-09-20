@@ -49,96 +49,105 @@ export default function AchievementCard({
   };
 
   return (
-    <div className="pv-card pv-project-card pv-achievement-card">
-      <div className="pv-project-card__header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <span
-            className="pv-skill-card__category"
-            style={{
-              backgroundColor: getCategoryColor(achievement.category),
-              color: 'var(--color-carbon)',
-            }}
-          >
-            {achievement.categoryDisplayName}
-          </span>
-          {achievement.featured && (
-            <button
-              type="button"
-              className="pv-skill-card__featured-badge"
-              title="Featured"
-              onClick={() => onToggleFeatured && onToggleFeatured(achievement)}
+    <div className="pv-achievement-card">
+      <div>
+        {/* Top Header */}
+        <div className="pv-achievement-card__top">
+          <div className="pv-achievement-card__badges">
+            <span
+              className="pv-skill-card__category"
+              style={{
+                backgroundColor: getCategoryColor(achievement.category),
+                color: 'var(--color-carbon)',
+              }}
             >
-              <Star size={13} fill="var(--color-carbon)" color="var(--color-carbon)" />
-              <span>Featured</span>
-            </button>
-          )}
-          {achievement.includeInResume && (
-            <button
-              type="button"
-              className="pv-skill-card__resume-badge"
-              title="In Resume"
-              onClick={() => onToggleResume && onToggleResume(achievement)}
-            >
-              <FileText size={12} />
-              <span>In Resume</span>
-            </button>
-          )}
+              {achievement.categoryDisplayName}
+            </span>
+            {achievement.featured && (
+              <button
+                type="button"
+                className="pv-skill-card__featured-badge"
+                title="Featured"
+                onClick={() => onToggleFeatured && onToggleFeatured(achievement)}
+              >
+                <Star size={12} fill="var(--color-carbon)" color="var(--color-carbon)" />
+                <span>Featured</span>
+              </button>
+            )}
+            {achievement.includeInResume && (
+              <button
+                type="button"
+                className="pv-skill-card__resume-badge"
+                title="In Resume"
+                onClick={() => onToggleResume && onToggleResume(achievement)}
+              >
+                <FileText size={12} />
+                <span>In Resume</span>
+              </button>
+            )}
+          </div>
+
+          <div className="pv-achievement-card__date">
+            <Calendar size={13} color="#666" />
+            <span>{formatDate(achievement.achievementDate)}</span>
+          </div>
         </div>
 
-        <div className="pv-project-card__meta" style={{ fontSize: '13px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <Calendar size={13} />
-          <span>{formatDate(achievement.achievementDate)}</span>
+        {/* Title */}
+        <h3
+          className="pv-achievement-card__title"
+          onClick={() => onView(achievement)}
+          title={achievement.title}
+        >
+          {achievement.title}
+        </h3>
+
+        {/* Organization */}
+        <div className="pv-achievement-card__org" style={{ margin: '6px 0 10px 0' }}>
+          <Building size={14} color="#666" />
+          <span>{achievement.organization}</span>
         </div>
+
+        {/* Description */}
+        {achievement.description && (
+          <p className="pv-achievement-card__desc">{achievement.description}</p>
+        )}
+
+        {/* Proof URL Link */}
+        {achievement.url && (
+          <div style={{ marginTop: '10px' }}>
+            <a
+              href={achievement.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pv-achievement-card__link"
+            >
+              <ExternalLink size={13} />
+              <span>View Proof / Credential</span>
+            </a>
+          </div>
+        )}
       </div>
 
-      <h3
-        className="pv-project-card__title"
-        onClick={() => onView(achievement)}
-        style={{ cursor: 'pointer', marginTop: '12px' }}
-      >
-        {achievement.title}
-      </h3>
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', fontWeight: 600, margin: '6px 0 10px 0' }}>
-        <Building size={14} />
-        <span>{achievement.organization}</span>
-      </div>
-
-      {achievement.description && (
-        <p className="pv-project-card__desc">{achievement.description}</p>
-      )}
-
-      {achievement.url && (
-        <div style={{ margin: '10px 0' }}>
-          <a
-            href={achievement.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="pv-project-card__link"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: 'var(--color-carbon)', fontWeight: 600 }}
-          >
-            <ExternalLink size={13} />
-            <span>View Proof / Link</span>
-          </a>
-        </div>
-      )}
-
-      <div className="pv-project-card__footer" style={{ marginTop: 'auto', paddingTop: '16px' }}>
+      {/* Footer Actions */}
+      <div className="pv-achievement-card__footer">
         <button
           type="button"
           className="pv-btn pv-btn--light pv-btn--sm"
           onClick={() => onView(achievement)}
         >
-          Details
+          View Details
         </button>
+
         <div style={{ display: 'flex', gap: '6px' }}>
           <button
             type="button"
-            className="pv-btn pv-btn--ghost pv-btn--sm"
+            className="pv-btn pv-btn--light pv-btn--sm"
             onClick={() => onEdit(achievement)}
             aria-label="Edit achievement"
           >
             <Edit2 size={13} />
+            <span>Edit</span>
           </button>
           <button
             type="button"

@@ -11,9 +11,6 @@ import {
   Edit3,
   Trash2,
   FileText,
-  
-  
-  
 } from 'lucide-react';
 
 interface FinancialCardProps {
@@ -70,73 +67,50 @@ export default function FinancialCard({ account, onEdit, onDelete, onPreview }: 
   };
 
   return (
-    <div className="pv-card" style={{ padding: '24px', borderRadius: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div className="pv-vault-card">
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div className="pv-vault-card__top">
+        <div className="pv-vault-card__header-main">
           <div
-            style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: getTypeBadgeColor(account.accountType),
-              border: '1px solid var(--color-carbon)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
+            className="pv-vault-card__icon"
+            style={{ background: getTypeBadgeColor(account.accountType) }}
           >
-            <Building2 size={18} color="var(--color-carbon)" />
+            <Building2 size={20} color="var(--color-carbon)" />
           </div>
-          <div>
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                padding: '2px 8px',
-                borderRadius: '1600px',
-                border: '1px solid var(--color-carbon)',
-                background: getTypeBadgeColor(account.accountType),
-                display: 'inline-block',
-                marginBottom: '4px',
-              }}
-            >
-              {account.accountType}
+          <div className="pv-vault-card__titles">
+            <h3 className="pv-vault-card__title" title={account.bankName}>
+              {account.bankName}
+            </h3>
+            <span className="pv-vault-card__subtitle">
+              {account.accountType.replace(/_/g, ' ')}
             </span>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, margin: 0 }}>{account.bankName}</h3>
           </div>
         </div>
+
+        <span
+          className="pv-vault-card__badge"
+          style={{ background: getTypeBadgeColor(account.accountType) }}
+        >
+          {account.accountType}
+        </span>
       </div>
 
       {/* Masked / Revealed Account Number */}
-      <div
-        style={{
-          background: 'var(--color-soft-mist)',
-          padding: '10px 16px',
-          borderRadius: '16px',
-          border: '1px solid var(--color-carbon)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '8px',
-        }}
-      >
-        <div>
-          <span style={{ fontSize: '11px', color: '#666', display: 'block', textTransform: 'uppercase', fontWeight: 600 }}>
+      <div className="pv-vault-card__secret-box">
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <span style={{ fontSize: '11px', color: '#666', display: 'block', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em', marginBottom: '2px' }}>
             Account Number
           </span>
-          <span style={{ fontFamily: 'monospace', fontSize: '15px', fontWeight: 700, letterSpacing: '0.5px' }}>
+          <span className="pv-vault-card__secret-text">
             {revealed ? revealed.accountNumber : account.maskedAccountNumber}
           </span>
         </div>
 
-        <div style={{ display: 'flex', gap: '6px' }}>
+        <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
           <button
             type="button"
             className="pv-btn pv-btn--light pv-btn--sm"
-            style={{ padding: '4px 8px', borderRadius: '1200px' }}
+            style={{ padding: '4px 8px' }}
             onClick={handleToggleReveal}
             disabled={isRevealing}
             title={revealed ? 'Hide account details' : 'Reveal account details'}
@@ -148,7 +122,7 @@ export default function FinancialCard({ account, onEdit, onDelete, onPreview }: 
             <button
               type="button"
               className="pv-btn pv-btn--light pv-btn--sm"
-              style={{ padding: '4px 8px', borderRadius: '1200px' }}
+              style={{ padding: '4px 8px' }}
               onClick={() => handleCopy(revealed.accountNumber, 'acc')}
               title="Copy account number"
             >
@@ -159,16 +133,17 @@ export default function FinancialCard({ account, onEdit, onDelete, onPreview }: 
       </div>
 
       {/* Details Grid: IFSC, Branch, UPI */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px', fontSize: '12px' }}>
+      <div className="pv-vault-card__details-grid">
         {account.ifsc && (
-          <div style={{ background: '#fafafa', padding: '8px 12px', borderRadius: '12px', border: '1px solid #eee' }}>
-            <span style={{ color: '#666', display: 'block', fontSize: '10px', textTransform: 'uppercase' }}>IFSC</span>
+          <div className="pv-vault-card__detail-item">
+            <span style={{ color: '#666', fontSize: '10px', textTransform: 'uppercase', fontWeight: 700 }}>IFSC</span>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <strong style={{ fontFamily: 'monospace' }}>{account.ifsc}</strong>
+              <strong style={{ fontFamily: 'monospace', fontSize: '13px' }}>{account.ifsc}</strong>
               <button
                 type="button"
                 style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                 onClick={() => handleCopy(account.ifsc!, 'ifsc')}
+                title="Copy IFSC"
               >
                 {copiedField === 'ifsc' ? <Check size={12} color="green" /> : <Copy size={12} />}
               </button>
@@ -177,23 +152,26 @@ export default function FinancialCard({ account, onEdit, onDelete, onPreview }: 
         )}
 
         {account.branch && (
-          <div style={{ background: '#fafafa', padding: '8px 12px', borderRadius: '12px', border: '1px solid #eee' }}>
-            <span style={{ color: '#666', display: 'block', fontSize: '10px', textTransform: 'uppercase' }}>Branch</span>
-            <span style={{ fontWeight: 600, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <div className="pv-vault-card__detail-item">
+            <span style={{ color: '#666', fontSize: '10px', textTransform: 'uppercase', fontWeight: 700 }}>Branch</span>
+            <span style={{ fontWeight: 600, fontSize: '13px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {account.branch}
             </span>
           </div>
         )}
 
         {account.upiId && (
-          <div style={{ background: '#fafafa', padding: '8px 12px', borderRadius: '12px', border: '1px solid #eee' }}>
-            <span style={{ color: '#666', display: 'block', fontSize: '10px', textTransform: 'uppercase' }}>UPI ID</span>
+          <div className="pv-vault-card__detail-item">
+            <span style={{ color: '#666', fontSize: '10px', textTransform: 'uppercase', fontWeight: 700 }}>UPI ID</span>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <strong style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{account.upiId}</strong>
+              <strong style={{ fontSize: '13px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {account.upiId}
+              </strong>
               <button
                 type="button"
                 style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                 onClick={() => handleCopy(account.upiId!, 'upi')}
+                title="Copy UPI ID"
               >
                 {copiedField === 'upi' ? <Check size={12} color="green" /> : <Copy size={12} />}
               </button>
@@ -208,7 +186,7 @@ export default function FinancialCard({ account, onEdit, onDelete, onPreview }: 
           <button
             type="button"
             className="pv-btn pv-btn--light pv-btn--sm"
-            style={{ borderRadius: '1600px', fontSize: '12px' }}
+            style={{ fontSize: '12px' }}
             onClick={() => {
               if (!vaultToken) return;
               onPreview(
@@ -220,35 +198,34 @@ export default function FinancialCard({ account, onEdit, onDelete, onPreview }: 
             }}
           >
             <FileText size={13} />
-            <span>View Attachment ({account.fileName})</span>
+            <span>Attachment: {account.fileName || 'Document'}</span>
           </button>
         </div>
       )}
 
       {/* Revealed Tax Information & Notes */}
       {revealed && (revealed.taxInfo || revealed.notes) && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
           {revealed.taxInfo && (
-            <div style={{ background: '#fafafa', padding: '10px', borderRadius: '12px', border: '1px dashed var(--color-carbon)' }}>
-              <strong>Tax Information:</strong>
-              <p style={{ margin: '4px 0 0', whiteSpace: 'pre-wrap' }}>{revealed.taxInfo}</p>
+            <div className="pv-vault-card__revealed-box">
+              <strong style={{ display: 'block', marginBottom: '4px' }}>Tax Information:</strong>
+              <p style={{ margin: 0, whiteSpace: 'pre-wrap', color: '#333' }}>{revealed.taxInfo}</p>
             </div>
           )}
           {revealed.notes && (
-            <div style={{ background: '#fafafa', padding: '10px', borderRadius: '12px', border: '1px dashed var(--color-carbon)' }}>
-              <strong>Notes:</strong>
-              <p style={{ margin: '4px 0 0', whiteSpace: 'pre-wrap' }}>{revealed.notes}</p>
+            <div className="pv-vault-card__revealed-box">
+              <strong style={{ display: 'block', marginBottom: '4px' }}>Notes:</strong>
+              <p style={{ margin: 0, whiteSpace: 'pre-wrap', color: '#333' }}>{revealed.notes}</p>
             </div>
           )}
         </div>
       )}
 
       {/* Card Footer Actions */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', borderTop: '1px solid #eee', paddingTop: '12px' }}>
+      <div className="pv-vault-card__footer">
         <button
           type="button"
           className="pv-btn pv-btn--light pv-btn--sm"
-          style={{ padding: '6px 12px', borderRadius: '1600px' }}
           onClick={() => onEdit(account)}
         >
           <Edit3 size={14} />
@@ -257,11 +234,10 @@ export default function FinancialCard({ account, onEdit, onDelete, onPreview }: 
 
         <button
           type="button"
-          className="pv-btn pv-btn--light pv-btn--sm"
-          style={{ padding: '6px 12px', borderRadius: '1600px' }}
+          className="pv-btn pv-btn--ghost pv-btn--sm pv-btn--danger"
           onClick={() => onDelete(account)}
         >
-          <Trash2 size={14} color="var(--color-ember)" />
+          <Trash2 size={14} />
           <span>Delete</span>
         </button>
       </div>

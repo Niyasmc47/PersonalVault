@@ -70,78 +70,68 @@ export default function DocumentCard({ document, onEdit, onDelete, onPreview }: 
   };
 
   return (
-    <div className="pv-card" style={{ padding: '24px', borderRadius: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div className="pv-vault-card">
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div className="pv-vault-card__top">
+        <div className="pv-vault-card__header-main">
           <div
-            style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: getCategoryColor(document.category),
-              border: '1px solid var(--color-carbon)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
+            className="pv-vault-card__icon"
+            style={{ background: getCategoryColor(document.category) }}
           >
             {document.section === 'EDUCATION' ? (
-              <GraduationCap size={18} color="var(--color-carbon)" />
+              <GraduationCap size={20} color="var(--color-carbon)" />
             ) : (
-              <FolderLock size={18} color="var(--color-carbon)" />
+              <FolderLock size={20} color="var(--color-carbon)" />
             )}
           </div>
-          <div>
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                padding: '2px 8px',
-                borderRadius: '1600px',
-                border: '1px solid var(--color-carbon)',
-                background: getCategoryColor(document.category),
-                display: 'inline-block',
-                marginBottom: '4px',
-              }}
-            >
+          <div className="pv-vault-card__titles">
+            <h3 className="pv-vault-card__title" title={document.title}>
+              {document.title}
+            </h3>
+            <span className="pv-vault-card__subtitle">
               {formatCategory(document.category)}
             </span>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, margin: 0 }}>{document.title}</h3>
           </div>
         </div>
+
+        <span
+          className="pv-vault-card__badge"
+          style={{ background: getCategoryColor(document.category) }}
+        >
+          {formatCategory(document.category)}
+        </span>
       </div>
 
       {/* Issuer & Identifier */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: '#444' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', color: '#444' }}>
         {document.issuerOrInstitution && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Building size={14} color="#666" />
-            <span>{document.issuerOrInstitution}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Building size={15} color="#666" style={{ flexShrink: 0 }} />
+            <span style={{ fontWeight: 600 }}>{document.issuerOrInstitution}</span>
           </div>
         )}
         {document.documentIdentifier && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Hash size={14} color="#666" />
-            <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>{document.documentIdentifier}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Hash size={15} color="#666" style={{ flexShrink: 0 }} />
+            <span style={{ fontFamily: 'monospace', fontWeight: 700, letterSpacing: '0.5px' }}>
+              {document.documentIdentifier}
+            </span>
           </div>
         )}
       </div>
 
       {/* Dates */}
       {(document.issueDate || document.expiryDate) && (
-        <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: '#555' }}>
+        <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: '#444' }}>
           {document.issueDate && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Calendar size={13} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Calendar size={14} />
               <span>Issued: {document.issueDate}</span>
             </div>
           )}
           {document.expiryDate && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Calendar size={13} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Calendar size={14} />
               <span>Expires: {document.expiryDate}</span>
             </div>
           )}
@@ -149,11 +139,11 @@ export default function DocumentCard({ document, onEdit, onDelete, onPreview }: 
       )}
 
       {/* Document File Preview Button */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
         <button
           type="button"
           className="pv-btn pv-btn--light pv-btn--sm"
-          style={{ borderRadius: '1600px', fontSize: '12px' }}
+          style={{ fontSize: '12px' }}
           onClick={() => {
             if (!vaultToken) return;
             onPreview(
@@ -165,14 +155,14 @@ export default function DocumentCard({ document, onEdit, onDelete, onPreview }: 
           }}
         >
           <FileText size={13} />
-          <span>View Document ({document.originalFileName})</span>
+          <span>Attachment: {document.originalFileName}</span>
         </button>
 
         {document.hasNotes && (
           <button
             type="button"
             className="pv-btn pv-btn--light pv-btn--sm"
-            style={{ borderRadius: '1600px', padding: '4px 8px' }}
+            style={{ padding: '4px 8px' }}
             onClick={handleToggleReveal}
             disabled={isRevealing}
             title={revealed ? 'Hide notes' : 'View notes'}
@@ -184,18 +174,17 @@ export default function DocumentCard({ document, onEdit, onDelete, onPreview }: 
 
       {/* Revealed Notes */}
       {revealed?.notes && (
-        <div style={{ background: '#fafafa', padding: '10px', borderRadius: '12px', border: '1px dashed var(--color-carbon)', fontSize: '12px' }}>
-          <strong>Notes:</strong>
-          <p style={{ margin: '4px 0 0', whiteSpace: 'pre-wrap' }}>{revealed.notes}</p>
+        <div className="pv-vault-card__revealed-box">
+          <strong style={{ display: 'block', marginBottom: '4px' }}>Notes:</strong>
+          <p style={{ margin: 0, whiteSpace: 'pre-wrap', color: '#333' }}>{revealed.notes}</p>
         </div>
       )}
 
       {/* Card Actions */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', borderTop: '1px solid #eee', paddingTop: '12px' }}>
+      <div className="pv-vault-card__footer">
         <button
           type="button"
           className="pv-btn pv-btn--light pv-btn--sm"
-          style={{ padding: '6px 12px', borderRadius: '1600px' }}
           onClick={() => onEdit(document)}
         >
           <Edit3 size={14} />
@@ -204,11 +193,10 @@ export default function DocumentCard({ document, onEdit, onDelete, onPreview }: 
 
         <button
           type="button"
-          className="pv-btn pv-btn--light pv-btn--sm"
-          style={{ padding: '6px 12px', borderRadius: '1600px' }}
+          className="pv-btn pv-btn--ghost pv-btn--sm pv-btn--danger"
           onClick={() => onDelete(document)}
         >
-          <Trash2 size={14} color="var(--color-ember)" />
+          <Trash2 size={14} />
           <span>Delete</span>
         </button>
       </div>

@@ -69,41 +69,29 @@ export default function CredentialCard({ credential, onEdit, onDelete }: Credent
   };
 
   return (
-    <div className="pv-card" style={{ padding: '24px', borderRadius: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div className="pv-vault-card">
       {/* Top Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div className="pv-vault-card__top">
+        <div className="pv-vault-card__header-main">
           <div
-            style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: getCategoryColor(credential.category),
-              border: '1px solid var(--color-carbon)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
+            className="pv-vault-card__icon"
+            style={{ background: getCategoryColor(credential.category) }}
           >
-            <KeyRound size={18} color="var(--color-carbon)" />
+            <KeyRound size={20} color="var(--color-carbon)" />
           </div>
-          <div>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, margin: 0 }}>{credential.name}</h3>
-            <span style={{ fontSize: '13px', color: '#555', wordBreak: 'break-all' }}>{credential.username}</span>
+          <div className="pv-vault-card__titles">
+            <h3 className="pv-vault-card__title" title={credential.name}>
+              {credential.name}
+            </h3>
+            <span className="pv-vault-card__subtitle" title={credential.username}>
+              {credential.username}
+            </span>
           </div>
         </div>
 
         <span
-          style={{
-            fontSize: '11px',
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            padding: '4px 10px',
-            borderRadius: '1600px',
-            border: '1px solid var(--color-carbon)',
-            background: getCategoryColor(credential.category),
-          }}
+          className="pv-vault-card__badge"
+          style={{ background: getCategoryColor(credential.category) }}
         >
           {credential.category}
         </span>
@@ -115,15 +103,7 @@ export default function CredentialCard({ credential, onEdit, onDelete }: Credent
           href={credential.url.startsWith('http') ? credential.url : `https://${credential.url}`}
           target="_blank"
           rel="noopener noreferrer"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            fontSize: '12px',
-            color: '#333',
-            textDecoration: 'underline',
-            width: 'fit-content',
-          }}
+          className="pv-vault-card__link"
         >
           <span>{credential.url}</span>
           <ExternalLink size={12} />
@@ -131,21 +111,10 @@ export default function CredentialCard({ credential, onEdit, onDelete }: Credent
       )}
 
       {/* Password Masked / Revealed Row */}
-      <div
-        style={{
-          background: 'var(--color-soft-mist)',
-          padding: '10px 16px',
-          borderRadius: '16px',
-          border: '1px solid var(--color-carbon)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '8px',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
-          <Lock size={14} color="#666" />
-          <span style={{ fontFamily: 'monospace', fontSize: '14px', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+      <div className="pv-vault-card__secret-box">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, flex: 1 }}>
+          <Lock size={15} color="#555" style={{ flexShrink: 0 }} />
+          <span className="pv-vault-card__secret-text">
             {revealed?.password ? revealed.password : '••••••••••••'}
           </span>
         </div>
@@ -154,7 +123,7 @@ export default function CredentialCard({ credential, onEdit, onDelete }: Credent
           <button
             type="button"
             className="pv-btn pv-btn--light pv-btn--sm"
-            style={{ padding: '4px 8px', borderRadius: '1200px' }}
+            style={{ padding: '4px 8px' }}
             onClick={handleToggleReveal}
             disabled={isRevealing}
             title={revealed ? 'Hide secret' : 'Reveal secret'}
@@ -166,7 +135,7 @@ export default function CredentialCard({ credential, onEdit, onDelete }: Credent
             <button
               type="button"
               className="pv-btn pv-btn--light pv-btn--sm"
-              style={{ padding: '4px 8px', borderRadius: '1200px' }}
+              style={{ padding: '4px 8px' }}
               onClick={() => handleCopy(revealed.password!, 'password')}
               title="Copy password"
             >
@@ -178,58 +147,63 @@ export default function CredentialCard({ credential, onEdit, onDelete }: Credent
 
       {/* Revealed Extra Secrets (Notes, API Keys, Recovery Codes) */}
       {revealed && (revealed.notes || revealed.apiKeys || revealed.recoveryCodes) && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12px', marginTop: '4px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '4px' }}>
           {revealed.notes && (
-            <div style={{ background: '#fafafa', padding: '10px', borderRadius: '12px', border: '1px dashed var(--color-carbon)' }}>
-              <strong>Notes:</strong>
-              <p style={{ margin: '4px 0 0', whiteSpace: 'pre-wrap' }}>{revealed.notes}</p>
+            <div className="pv-vault-card__revealed-box">
+              <strong style={{ display: 'block', marginBottom: '4px' }}>Notes:</strong>
+              <p style={{ margin: 0, whiteSpace: 'pre-wrap', color: '#333' }}>{revealed.notes}</p>
             </div>
           )}
 
           {revealed.apiKeys && (
-            <div style={{ background: '#fafafa', padding: '10px', borderRadius: '12px', border: '1px dashed var(--color-carbon)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}>
-                  <FileCode size={13} /> API Key:
+            <div className="pv-vault-card__revealed-box">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700 }}>
+                  <FileCode size={14} /> API Key:
                 </span>
                 <button
                   type="button"
-                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                   onClick={() => handleCopy(revealed.apiKeys!, 'apiKey')}
+                  title="Copy API Key"
                 >
-                  {copied === 'apiKey' ? <Check size={13} color="green" /> : <Copy size={13} />}
+                  {copied === 'apiKey' ? <Check size={14} color="green" /> : <Copy size={14} />}
                 </button>
               </div>
-              <code style={{ display: 'block', margin: '4px 0 0', wordBreak: 'break-all' }}>{revealed.apiKeys}</code>
+              <code style={{ display: 'block', wordBreak: 'break-all', fontFamily: 'monospace', fontSize: '12px' }}>
+                {revealed.apiKeys}
+              </code>
             </div>
           )}
 
           {revealed.recoveryCodes && (
-            <div style={{ background: '#fafafa', padding: '10px', borderRadius: '12px', border: '1px dashed var(--color-carbon)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}>
-                  <ShieldAlert size={13} /> Recovery Codes:
+            <div className="pv-vault-card__revealed-box">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700 }}>
+                  <ShieldAlert size={14} /> Recovery Codes:
                 </span>
                 <button
                   type="button"
-                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                   onClick={() => handleCopy(revealed.recoveryCodes!, 'recCodes')}
+                  title="Copy Recovery Codes"
                 >
-                  {copied === 'recCodes' ? <Check size={13} color="green" /> : <Copy size={13} />}
+                  {copied === 'recCodes' ? <Check size={14} color="green" /> : <Copy size={14} />}
                 </button>
               </div>
-              <pre style={{ margin: '4px 0 0', whiteSpace: 'pre-wrap', fontFamily: 'monospace' }}>{revealed.recoveryCodes}</pre>
+              <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: '12px' }}>
+                {revealed.recoveryCodes}
+              </pre>
             </div>
           )}
         </div>
       )}
 
       {/* Card Footer Actions */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', borderTop: '1px solid #eee', paddingTop: '12px' }}>
+      <div className="pv-vault-card__footer">
         <button
           type="button"
           className="pv-btn pv-btn--light pv-btn--sm"
-          style={{ padding: '6px 12px', borderRadius: '1600px' }}
           onClick={() => onEdit(credential)}
         >
           <Edit3 size={14} />
@@ -238,11 +212,10 @@ export default function CredentialCard({ credential, onEdit, onDelete }: Credent
 
         <button
           type="button"
-          className="pv-btn pv-btn--light pv-btn--sm"
-          style={{ padding: '6px 12px', borderRadius: '1600px' }}
+          className="pv-btn pv-btn--ghost pv-btn--sm pv-btn--danger"
           onClick={() => onDelete(credential)}
         >
-          <Trash2 size={14} color="var(--color-ember)" />
+          <Trash2 size={14} />
           <span>Delete</span>
         </button>
       </div>

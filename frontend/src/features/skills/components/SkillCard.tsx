@@ -49,7 +49,7 @@ export default function SkillCard({
   };
 
   return (
-    <div className="pv-card pv-skill-card">
+    <div className="pv-skill-card">
       <div className="pv-skill-card__header">
         <div className="pv-skill-card__title-row">
           <h3 className="pv-skill-card__name">{skill.name}</h3>

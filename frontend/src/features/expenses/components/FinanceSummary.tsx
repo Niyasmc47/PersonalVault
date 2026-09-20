@@ -19,9 +19,9 @@ export default function FinanceSummary({ summary, isLoading }: FinanceSummaryPro
     return (
       <div className="pv-features-grid">
         {[1, 2, 3].map(i => (
-          <div key={i} className="pv-card" style={{ height: '120px', display: 'flex', flexDirection: 'column', justifyContent: 'center', opacity: 0.5 }}>
-            <div style={{ height: '16px', background: 'var(--color-concrete-gray)', width: '40%', marginBottom: '12px', borderRadius: '4px' }}></div>
-            <div style={{ height: '32px', background: 'var(--color-concrete-gray)', width: '70%', borderRadius: '4px' }}></div>
+          <div key={i} className="pv-card" style={{ height: '140px', display: 'flex', flexDirection: 'column', justifyContent: 'center', opacity: 0.5 }}>
+            <div style={{ height: '18px', background: 'var(--color-concrete-gray)', width: '40%', marginBottom: '16px', borderRadius: '6px' }}></div>
+            <div style={{ height: '36px', background: 'var(--color-concrete-gray)', width: '70%', borderRadius: '8px' }}></div>
           </div>
         ))}
       </div>
@@ -30,38 +30,80 @@ export default function FinanceSummary({ summary, isLoading }: FinanceSummaryPro
 
   return (
     <div className="pv-features-grid">
-      <div className="pv-card" style={{ background: 'var(--color-paper-white)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-          <div style={{ background: 'var(--color-mint-pop)', padding: '8px', borderRadius: '50%' }}>
-            <ArrowUpCircle size={20} color="var(--color-carbon)" />
+      <div className="pv-card">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+          <div
+            style={{
+              background: 'var(--color-mint-pop)',
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              border: '1.5px solid var(--color-carbon)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <ArrowUpCircle size={22} color="var(--color-carbon)" />
           </div>
-          <h3 style={{ fontSize: '15px', color: 'var(--color-carbon)', margin: 0 }}>Total Income</h3>
+          <span style={{ fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#555' }}>
+            Total Income
+          </span>
         </div>
-        <div style={{ fontSize: '32px', fontWeight: 'var(--font-weight-bold)' }}>
+        <div style={{ fontSize: '32px', fontWeight: 800, color: 'var(--color-carbon)', letterSpacing: '-0.5px' }}>
           {formatCurrency(summary.totalIncome)}
         </div>
       </div>
 
-      <div className="pv-card" style={{ background: 'var(--color-paper-white)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-          <div style={{ background: 'var(--color-sunburst)', padding: '8px', borderRadius: '50%' }}>
-            <ArrowDownCircle size={20} color="var(--color-carbon)" />
+      <div className="pv-card">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+          <div
+            style={{
+              background: 'var(--color-sunburst)',
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              border: '1.5px solid var(--color-carbon)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <ArrowDownCircle size={22} color="var(--color-carbon)" />
           </div>
-          <h3 style={{ fontSize: '15px', color: 'var(--color-carbon)', margin: 0 }}>Total Expenses</h3>
+          <span style={{ fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#555' }}>
+            Total Expenses
+          </span>
         </div>
-        <div style={{ fontSize: '32px', fontWeight: 'var(--font-weight-bold)' }}>
+        <div style={{ fontSize: '32px', fontWeight: 800, color: 'var(--color-carbon)', letterSpacing: '-0.5px' }}>
           {formatCurrency(summary.totalExpenses)}
         </div>
       </div>
 
-      <div className="pv-card" style={{ background: 'var(--color-carbon)', color: 'var(--color-paper-white)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-          <div style={{ background: 'var(--color-paper-white)', padding: '8px', borderRadius: '50%' }}>
-            <Wallet size={20} color="var(--color-carbon)" />
+      <div className="pv-card" style={{ background: 'var(--color-carbon)', color: 'var(--color-paper-white)', borderColor: 'var(--color-carbon)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+          <div
+            style={{
+              background: 'var(--color-paper-white)',
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              border: '1.5px solid var(--color-carbon)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <Wallet size={22} color="var(--color-carbon)" />
           </div>
-          <h3 style={{ fontSize: '15px', color: 'var(--color-paper-white)', margin: 0 }}>Current Balance</h3>
+          <span style={{ fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'rgba(255, 255, 255, 0.75)' }}>
+            Net Balance
+          </span>
         </div>
-        <div style={{ fontSize: '32px', fontWeight: 'var(--font-weight-bold)' }}>
+        <div style={{ fontSize: '32px', fontWeight: 800, color: 'var(--color-paper-white)', letterSpacing: '-0.5px' }}>
           {formatCurrency(summary.balance)}
         </div>
       </div>

@@ -114,9 +114,21 @@
 /* ── Cards ───────────────────────────────────────────────── */
 .pv-card {
   background: var(--surface-paper-white);
-  border: 1px solid var(--color-carbon);
-  border-radius: var(--r-2xl-2);
-  padding: var(--card-pad);
+  border: 1.5px solid var(--color-carbon);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 2px 2px 0px var(--color-carbon);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.pv-card--interactive {
+  cursor: pointer;
+}
+.pv-card--interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: 3px 3px 0px var(--color-carbon);
 }
 
 /* ── Marquee ─────────────────────────────────────────────── */
@@ -790,6 +802,163 @@
 
 .pv-input:focus, .pv-select:focus, .pv-textarea:focus {
   box-shadow: 0 0 0 2px var(--color-carbon);
+}
+
+/* ============================================================
+   Secure Vault Cards
+   ============================================================ */
+
+.pv-vault-card {
+  background: var(--surface-paper-white);
+  border: 1.5px solid var(--color-carbon);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 2px 2px 0px var(--color-carbon);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  height: 100%;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+
+.pv-vault-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 3px 3px 0px var(--color-carbon);
+}
+
+.pv-vault-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.pv-vault-card__header-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.pv-vault-card__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-full);
+  border: 1.5px solid var(--color-carbon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pv-vault-card__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.pv-vault-card__title {
+  font-size: 17px;
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pv-vault-card__subtitle {
+  font-size: 13px;
+  color: #555555;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--font-weight-medium);
+}
+
+.pv-vault-card__badge {
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 4px 10px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--color-carbon);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pv-vault-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-carbon);
+  text-decoration: underline;
+  width: fit-content;
+  font-weight: var(--font-weight-medium);
+  word-break: break-all;
+}
+
+.pv-vault-card__secret-box {
+  background: var(--color-soft-mist);
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1.5px solid var(--color-carbon);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.pv-vault-card__secret-text {
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pv-vault-card__details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  font-size: 12px;
+}
+
+.pv-vault-card__detail-item {
+  background: #fafafa;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-concrete-gray);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pv-vault-card__revealed-box {
+  background: #fafafa;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px dashed var(--color-carbon);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.pv-vault-card__footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-soft-mist);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 /* ── Certificate Grid ────────────────────────────────────── */
@@ -1970,39 +2139,52 @@
    ============================================================ */
 
 .pv-skill-card {
+  background: var(--surface-paper-white);
+  border: 1.5px solid var(--color-carbon);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 2px 2px 0px var(--color-carbon);
   display: flex;
   flex-direction: column;
-  gap: var(--sp-12);
-  transition: transform 0.15s ease;
+  justify-content: space-between;
+  gap: 16px;
+  height: 100%;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
 }
+
 .pv-skill-card:hover {
   transform: translateY(-2px);
+  box-shadow: 3px 3px 0px var(--color-carbon);
 }
 
 .pv-skill-card__header {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .pv-skill-card__title-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 8px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .pv-skill-card__name {
-  font-size: 18px;
+  font-size: 19px;
   font-weight: var(--font-weight-bold);
+  line-height: 1.3;
   margin: 0;
+  color: var(--color-carbon);
 }
 
 .pv-skill-card__badges {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-wrap: wrap;
 }
 
 .pv-skill-card__featured-badge {
@@ -2013,10 +2195,14 @@
   color: var(--color-carbon);
   font-size: 11px;
   font-weight: var(--font-weight-bold);
-  padding: 3px 8px;
+  padding: 4px 9px;
   border-radius: var(--r-full);
   border: 1px solid var(--color-carbon);
   cursor: pointer;
+  transition: transform 0.1s;
+}
+.pv-skill-card__featured-badge:hover {
+  transform: scale(1.04);
 }
 
 .pv-skill-card__resume-badge {
@@ -2027,33 +2213,41 @@
   color: var(--color-carbon);
   font-size: 11px;
   font-weight: var(--font-weight-bold);
-  padding: 3px 8px;
+  padding: 4px 9px;
   border-radius: var(--r-full);
   border: 1px solid var(--color-carbon);
   cursor: pointer;
+  transition: transform 0.1s;
+}
+.pv-skill-card__resume-badge:hover {
+  transform: scale(1.04);
 }
 
 .pv-skill-card__tags {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .pv-skill-card__category {
   display: inline-block;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: var(--font-weight-bold);
-  padding: 3px 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 4px 10px;
   border-radius: var(--r-full);
   border: 1px solid var(--color-carbon);
 }
 
 .pv-skill-card__proficiency {
   display: inline-block;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: var(--font-weight-bold);
-  padding: 3px 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 4px 10px;
   border-radius: var(--r-full);
   border: 1px solid var(--color-carbon);
 }
@@ -2063,23 +2257,127 @@
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: var(--color-carbon);
-  opacity: 0.8;
+  color: #555555;
+  font-weight: var(--font-weight-medium);
 }
 
 .pv-skill-card__description {
-  font-size: 13px;
-  line-height: 1.4;
-  color: var(--color-carbon);
-  opacity: 0.85;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #444444;
+  margin: 2px 0;
 }
 
 .pv-skill-card__actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 8px;
   margin-top: auto;
-  padding-top: 10px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-soft-mist);
+}
+
+/* ============================================================
+   Achievements Feature Styles
+   ============================================================ */
+
+.pv-achievement-card {
+  background: var(--surface-paper-white);
+  border: 1.5px solid var(--color-carbon);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 2px 2px 0px var(--color-carbon);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  height: 100%;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+
+.pv-achievement-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 3px 3px 0px var(--color-carbon);
+}
+
+.pv-achievement-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pv-achievement-card__badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pv-achievement-card__date {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  color: #555555;
+  font-weight: var(--font-weight-medium);
+}
+
+.pv-achievement-card__title {
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.35;
+  color: var(--color-carbon);
+  margin: 6px 0 2px 0;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.pv-achievement-card__title:hover {
+  color: var(--color-voltage-violet);
+}
+
+.pv-achievement-card__org {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #333333;
+}
+
+.pv-achievement-card__desc {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #444444;
+  margin: 2px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.pv-achievement-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--color-carbon);
+  font-weight: 600;
+  text-decoration: underline;
+  width: fit-content;
+}
+
+.pv-achievement-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 16px;
   border-top: 1px solid var(--color-soft-mist);
 }
 
@@ -2088,21 +2386,29 @@
    ============================================================ */
 
 .pv-social-card {
+  background: var(--surface-paper-white);
+  border: 1.5px solid var(--color-carbon);
+  border-radius: 20px;
+  padding: 18px 24px;
+  box-shadow: 2px 2px 0px var(--color-carbon);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
   gap: 16px;
-  transition: transform 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
 }
+
 .pv-social-card:hover {
   transform: translateY(-2px);
+  box-shadow: 3px 3px 0px var(--color-carbon);
 }
 
 .pv-social-card__left {
   display: flex;
   align-items: center;
   gap: 16px;
+  min-width: 0;
   flex: 1;
 }
 
@@ -2110,7 +2416,7 @@
   width: 44px;
   height: 44px;
   border-radius: var(--r-full);
-  border: 1px solid var(--color-carbon);
+  border: 1.5px solid var(--color-carbon);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2120,19 +2426,25 @@
 .pv-social-card__info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
 }
 
 .pv-social-card__label {
   font-size: 16px;
   font-weight: var(--font-weight-bold);
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .pv-social-card__actions {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 /* ============================================================

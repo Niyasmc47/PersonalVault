@@ -86,7 +86,7 @@ export default function DocumentSection({
 
       {/* Grid of Cards */}
       {filtered.length > 0 ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '24px' }}>
           {filtered.map((doc) => (
             <DocumentCard
               key={doc.id}
