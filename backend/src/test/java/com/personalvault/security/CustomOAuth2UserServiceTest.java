@@ -1,8 +1,8 @@
 package com.personalvault.security;
 
-import com.personalvault.entity.auth.AuthProvider;
-import com.personalvault.entity.auth.User;
-import com.personalvault.repository.auth.UserRepository;
+import com.personalvault.entity.AuthProvider;
+import com.personalvault.entity.User;
+import com.personalvault.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

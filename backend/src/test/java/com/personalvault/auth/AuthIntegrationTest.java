@@ -1,10 +1,11 @@
 package com.personalvault.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.personalvault.dto.auth.LoginRequest;
-import com.personalvault.dto.auth.RegisterRequest;
-import com.personalvault.entity.auth.User;
-import com.personalvault.repository.auth.UserRepository;
+import com.personalvault.dto.LoginRequest;
+import com.personalvault.dto.RegisterRequest;
+import com.personalvault.entity.User;
+import com.personalvault.repository.UserRepository;
+import com.personalvault.repository.TransactionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ class AuthIntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
-    private com.personalvault.repository.transaction.TransactionRepository transactionRepository;
+    private TransactionRepository transactionRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

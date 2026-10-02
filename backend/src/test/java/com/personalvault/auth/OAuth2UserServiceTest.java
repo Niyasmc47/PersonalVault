@@ -1,9 +1,9 @@
 package com.personalvault.auth;
 
-import com.personalvault.entity.auth.User;
-import com.personalvault.repository.auth.UserRepository;
+import com.personalvault.entity.User;
+import com.personalvault.repository.UserRepository;
 import com.personalvault.security.CustomOAuth2UserService;
-import com.personalvault.repository.transaction.TransactionRepository;
+import com.personalvault.repository.TransactionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

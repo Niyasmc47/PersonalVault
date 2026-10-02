@@ -8,6 +8,7 @@ import com.personalvault.service.GoogleDriveService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class GoogleDriveController {
         this.userRepository = userRepository;
     }
 
-    private User getAuthenticatedUser(CustomUserDetails userDetails) {
+    private User getAuthenticatedUser(UserDetails userDetails) {
         if (userDetails == null) {
             return null;
         }
@@ -39,7 +40,7 @@ public class GoogleDriveController {
     }
 
     @GetMapping("/status")
-    public ResponseEntity<GoogleDriveStatusResponse> getStatus(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<GoogleDriveStatusResponse> getStatus(@AuthenticationPrincipal UserDetails userDetails) {
         User user = getAuthenticatedUser(userDetails);
         if (user == null) {
             return ResponseEntity.ok(GoogleDriveStatusResponse.disconnected());
@@ -49,7 +50,7 @@ public class GoogleDriveController {
     }
 
     @GetMapping("/auth-url")
-    public ResponseEntity<Map<String, String>> getAuthorizationUrl(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<Map<String, String>> getAuthorizationUrl(@AuthenticationPrincipal UserDetails userDetails) {
         User user = getAuthenticatedUser(userDetails);
         if (user == null) {
             return ResponseEntity.status(401).build();
@@ -79,7 +80,7 @@ public class GoogleDriveController {
     }
 
     @PostMapping("/disconnect")
-    public ResponseEntity<Map<String, String>> disconnect(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<Map<String, String>> disconnect(@AuthenticationPrincipal UserDetails userDetails) {
         User user = getAuthenticatedUser(userDetails);
         if (user == null) {
             return ResponseEntity.status(401).build();
