@@ -1,163 +1,208 @@
 # PersonalVault Development Guide
 
-## 1. Purpose
+## 1. Overview & Purpose
 
-This guide defines exactly where code belongs so all team members follow the same structure.
+This guide outlines the coding standards, file placement rules, and architectural patterns for PersonalVault. All developers must follow these conventions to maintain clean layered separation and consistency across the monorepo.
 
-## 2. Backend File Placement Rules
+---
 
-Base package:
+## 2. Backend Development Guidelines
 
-- `com.personalvault`
+### 2.1 Package Placement Rules
 
-Layers:
+All Java classes reside under `com.personalvault` in `backend/src/main/java/com/personalvault/`.
 
-- `entity/<feature>/`: JPA entities
-- `dto/<feature>/`: request/response DTOs
-- `repository/<feature>/`: Spring Data repositories
-- `service/<feature>/`: business services
-- `controller/<feature>/`: REST controllers
-- `mapper/<feature>/`: mapping classes (entity/DTO conversion)
-- `exception/`: global and custom exception handling
-- `config/`: Spring configuration
-- `security/`: security configuration and auth components
-- `util/`: helper utilities used by multiple features
+Packages are organized strictly by architectural layer:
 
-### Expense feature example (backend)
+| Layer / Package | Description | Example Files |
+| :--- | :--- | :--- |
+| `controller` | REST API endpoint handlers (`@RestController`) | `ProjectController.java`, `SmartDropController.java` |
+| `service` | Business logic & transactional services (`@Service`) | `ProjectService.java`, `SmartDropService.java` |
+| `repository` | Spring Data JPA interfaces (`@Repository`) | `ProjectRepository.java`, `VaultItemRepository.java` |
+| `entity` | Relational JPA entities (`@Entity`, `@Table`) | `Project.java`, `Certificate.java`, `User.java` |
+| `dto` | Request & Response Data Transfer Objects | `ProjectRequestDTO.java`, `ProjectResponseDTO.java` |
+| `mapper` | Entity $\leftrightarrow$ DTO converters | `ProjectMapper.java`, `VaultMapper.java` |
+| `extractor` | SmartDrop document content extractors | `PdfContentExtractor.java`, `DocxContentExtractor.java` |
+| `classifier` | SmartDrop document classification strategies | `OpenAiDocumentClassifier.java`, `RuleBasedDocumentClassifier.java` |
+| `model` | Non-entity domain and pipeline data models | `ExtractedContent.java`, `ClassificationResult.java` |
+| `config` | Spring `@Configuration` beans | `SecurityConfig.java`, `CorsConfig.java`, `AppConfig.java` |
+| `security` | Authentication filters, JWT token utilities | `JwtAuthenticationFilter.java`, `TokenProvider.java` |
+| `exception` | Custom exceptions and `@RestControllerAdvice` | `GlobalExceptionHandler.java`, `ResourceNotFoundException.java` |
+| `util` | Stateless cryptographic and helper utilities | `AESGCMUtil.java`, `FileUtils.java` |
 
-- `Expense.java` -> `entity/expense/`
-- `ExpenseDTO.java` -> `dto/expense/`
-- `ExpenseRepository.java` -> `repository/expense/`
-- `ExpenseService.java` -> `service/expense/`
-- `ExpenseController.java` -> `controller/expense/`
+> **Note**: Do not create sub-packages per feature inside `controller`, `dto`, `entity`, etc. All classes of a layer reside directly in that layer's package.
 
-## 3. Frontend File Placement Rules
+### 2.2 Naming Conventions (Backend)
 
-Shared folders under `frontend/src`:
+- **Controllers**: `[Domain]Controller.java` (e.g., `CertificateController.java`)
+- **Services**: `[Domain]Service.java` (e.g., `CertificateService.java`)
+- **Repositories**: `[Domain]Repository.java` (e.g., `CertificateRepository.java`)
+- **Entities**: `[Domain].java` (e.g., `Certificate.java`, `VaultItem.java`)
+- **DTOs**: `[Domain]RequestDTO.java`, `[Domain]ResponseDTO.java`
+- **Mappers**: `[Domain]Mapper.java` (e.g., `CertificateMapper.java`)
+- **Exceptions**: `[Domain]NotFoundException.java`, `[Action]Exception.java`
 
-- `components/`: reusable components shared across features
-- `layouts/`: page/layout shells
-- `pages/`: app-level pages not owned by one feature
-- `hooks/`: shared hooks
-- `services/`: shared API utilities/clients
-- `types/`: shared TS types/interfaces
-- `utils/`: helper functions
-- `routes/`: route definitions and route-related helpers
-- `contexts/`: context providers
-- `styles/`: global CSS/themes/tokens
+### 2.3 Backend Controller Standards
 
-Feature modules under `frontend/src/features`:
+1. Always use constructor injection (`@RequiredArgsConstructor` or explicit constructor).
+2. Validate incoming requests with `@Valid`.
+3. Extract authenticated user context using `SecurityUtils.getCurrentUserId()` or `@AuthenticationPrincipal`.
+4. Return typed response objects wrapped in standard response envelopes where applicable.
 
-- `auth/`
-- `vault/`
-- `expenses/`
-- `skills/`
-- `projects/`
-- `achievements/`
-- `certificates/`
-- `social/`
-- `resume/`
+```java
+@RestController
+@RequestMapping("/api/projects")
+@RequiredArgsConstructor
+public class ProjectController {
 
-Recommended structure per feature:
+    private final ProjectService projectService;
 
-```text
-features/<feature>/
-├── components/
-├── pages/
-├── hooks/
-├── services/
-├── types/
-└── index.ts
+    @PostMapping
+    public ResponseEntity<ProjectResponseDTO> createProject(
+            @Valid @RequestBody ProjectRequestDTO requestDTO) {
+        Long userId = SecurityUtils.getCurrentUserId();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(projectService.createProject(requestDTO, userId));
+    }
+}
 ```
 
-### Expense feature example (frontend)
+---
 
-- `ExpensePage.tsx` -> `features/expenses/pages/`
-- `ExpenseCard.tsx` -> `features/expenses/components/`
-- `expenseService.ts` -> `features/expenses/services/`
-- `expenseTypes.ts` -> `features/expenses/types/`
+## 3. Frontend Development Guidelines
 
-## 4. Naming Conventions
+### 3.1 Folder Structure & Placement Rules
 
-Backend:
-
-- Entities: `PascalCase` (`Expense`, `Certificate`)
-- DTOs: `PascalCase` with suffix (`ExpenseRequestDTO`, `ExpenseResponseDTO`)
-- Repositories: `PascalCase` + `Repository`
-- Services: `PascalCase` + `Service`
-- Controllers: `PascalCase` + `Controller`
-
-Frontend:
-
-- React components/pages/layouts: `PascalCase.tsx`
-- Hooks: `camelCase` with `use` prefix (`useExpenses.ts`)
-- Services: `camelCase` with `Service` suffix (`expenseService.ts`)
-- Types: `camelCase` or `PascalCase` by team preference, but keep consistent per file
-- Utilities: `camelCase.ts`
-
-## 5. API Call Rules
-
-- All HTTP calls belong in `services`.
-- Feature-specific calls stay in `features/<feature>/services`.
-- Shared/common API utilities stay in `src/services`.
-- UI components/pages should not make raw Axios calls directly when a service exists.
-
-## 6. Reusable vs Feature-Specific Components
-
-- If used in multiple features, place in `src/components`.
-- If only used by one feature, place in `features/<feature>/components`.
-
-## 7. Type Placement Rules
-
-- Feature-specific types: `features/<feature>/types`.
-- Shared/common types used by multiple features: `src/types`.
-
-## 8. Hook Placement Rules
-
-- Feature-specific hooks: `features/<feature>/hooks`.
-- Shared hooks: `src/hooks`.
-
-## 9. Utility Placement Rules
-
-- Feature-specific utilities: inside that feature folder (add `utils` if needed).
-- Global/shared utilities: `src/utils`.
-
-## 10. Git Collaboration Workflow
-
-Branch hierarchy:
+The frontend follows a **flat, layered structure** under `frontend/src/`:
 
 ```text
-main
-  ^
-  | Pull Request
-  |
-develop
-  ^
-  | Pull Request
-  |
-feature branches
+frontend/src/
+├── assets/             # Global images, icons, and SVG graphics
+├── components/         # Reusable and domain-specific UI components
+│   ├── common/         # Generic UI (Button, Modal, Card, Navbar, etc.)
+│   ├── auth/           # Login, Register, ProtectedRoute
+│   ├── dashboard/      # Dashboard widgets, stats, quick-action cards
+│   ├── smartdrop/      # SmartDropZone, SmartDropModal, FileItemPreview
+│   ├── projects/       # ProjectCard, ProjectModal, ProjectForm
+│   ├── certificates/   # CertificateCard, CertificateModal
+│   ├── skills/         # SkillBadge, SkillCategoryList, SkillModal
+│   ├── achievements/   # AchievementCard, AchievementModal
+│   ├── vault/          # VaultFileCard, VaultSecurityModal, EncryptedViewer
+│   ├── resume/         # ResumeBuilder, SectionEditor, TemplateSelector
+│   ├── social/         # SocialLinksList, SocialLinkModal
+│   ├── expenses/       # ExpenseList, ExpenseSummaryCard, ExpenseModal
+│   └── profile/        # ProfileHeader, UserSettingsForm
+├── contexts/           # React context providers (AuthContext, ThemeContext)
+├── hooks/              # Custom React hooks (useAuth, useVault, etc.)
+├── layouts/            # Page layouts (MainLayout, DashboardLayout, AuthLayout)
+├── pages/              # Route view pages (DashboardPage, ProjectsPage, etc.)
+├── routes/             # App routing definitions (AppRoutes.tsx)
+├── services/           # Typed API service modules (projectService, authService, etc.)
+├── styles/             # Global CSS, Tailwind styling rules
+├── types/              # TypeScript interfaces and DTO definitions
+└── utils/              # Helper functions (dates, validation, formatting)
 ```
 
-Example feature branches:
+### 3.2 Naming Conventions (Frontend)
 
-- `feature/auth`
-- `feature/vault`
-- `feature/expenses`
-- `feature/skills`
-- `feature/projects`
-- `feature/resume`
+- **Pages**: `[Domain]Page.tsx` under `src/pages/` (e.g., `ProjectsPage.tsx`, `VaultPage.tsx`)
+- **Components**: `[Name].tsx` under `src/components/<domain>/` (e.g., `src/components/projects/ProjectCard.tsx`)
+- **Services**: `[domain]Service.ts` under `src/services/` (e.g., `projectService.ts`, `smartdropService.ts`)
+- **Types**: `[domain].ts` under `src/types/` (e.g., `project.ts`, `smartdrop.ts`)
+- **Hooks**: `use[Name].ts` under `src/hooks/` (e.g., `useAuth.ts`, `useProjects.ts`)
 
-Rules:
+### 3.3 API Calling Standards
 
-- Never push feature work directly to `main`.
-- Implement work in feature branches.
-- Merge feature branches into `develop` using Pull Requests.
-- Merge `develop` into `main` using Pull Requests for stable releases.
-- Do not manually copy another developer's files into your branch.
-- Pull/rebase from `develop` before major work when appropriate.
+- **Never** make raw `fetch` or `axios` calls directly from inside UI components or pages.
+- Always encapsulate HTTP requests inside typed service functions in `src/services/`.
 
-Commit hygiene for collaboration:
+```typescript
+// src/services/projectService.ts
+import api from './api';
+import { Project, ProjectRequest } from '../types/project';
 
-- Commit `package.json` and `package-lock.json` when dependencies change.
-- Never commit `node_modules`.
-- Never commit secrets, passwords, API keys, tokens, or database credentials.
+export const projectService = {
+  getProjects: async (): Promise<Project[]> => {
+    const response = await api.get<Project[]>('/api/projects');
+    return response.data;
+  },
+
+  createProject: async (data: ProjectRequest): Promise<Project> => {
+    const response = await api.post<Project>('/api/projects', data);
+    return response.data;
+  },
+};
+```
+
+---
+
+## 4. Extending SmartDrop
+
+### 4.1 Adding a New Document Extractor
+
+1. Implement the `ContentExtractor` interface in `com.personalvault.extractor`:
+
+```java
+@Component
+public class CustomFormatExtractor implements ContentExtractor {
+
+    @Override
+    public boolean supports(String contentType, String fileExtension) {
+        return "custom/mime".equalsIgnoreCase(contentType) || "custom".equalsIgnoreCase(fileExtension);
+    }
+
+    @Override
+    public ExtractedContent extract(InputStream inputStream, String fileName) throws Exception {
+        // Extraction logic
+        return ExtractedContent.builder()
+                .rawText(extractedText)
+                .metadata(metadataMap)
+                .build();
+    }
+}
+```
+
+2. Spring will automatically register your extractor in `ExtractorFactory` via dependency injection.
+
+### 4.2 Adding a New Classifier or AI Provider
+
+1. Implement `DocumentClassifier` in `com.personalvault.classifier`.
+2. Configure provider selection in `application.properties` via `app.smartdrop.ai-provider`.
+
+---
+
+## 5. Adding a New Feature (End-to-End Workflow)
+
+When introducing a new domain feature (e.g., `Certifications`):
+
+### 1. Backend Steps:
+1. Create entity in `com.personalvault.entity.Certificate`.
+2. Create repository in `com.personalvault.repository.CertificateRepository`.
+3. Create DTOs in `com.personalvault.dto.CertificateRequestDTO` and `CertificateResponseDTO`.
+4. Create mapper in `com.personalvault.mapper.CertificateMapper`.
+5. Create service in `com.personalvault.service.CertificateService`.
+6. Create controller in `com.personalvault.controller.CertificateController`.
+
+### 2. Frontend Steps:
+1. Define types in `src/types/certificate.ts`.
+2. Create API methods in `src/services/certificateService.ts`.
+3. Create UI components in `src/components/certificates/` (`CertificateCard.tsx`, `CertificateModal.tsx`).
+4. Create view page in `src/pages/CertificatesPage.tsx`.
+5. Register route in `src/routes/AppRoutes.tsx`.
+6. Add navigation link in `src/components/common/Navbar.tsx` or `Sidebar.tsx`.
+
+---
+
+## 6. Git & Collaboration Workflow
+
+### Branch Strategy
+
+- `main`: Production-ready releases.
+- `develop`: Main development integration branch.
+- `feature/<feature-name>`: Active feature work branched from `develop`.
+
+### Pull Request & Commit Rules
+
+1. **Test Before Committing**: Run `mvn clean compile` on backend and `npm run build` on frontend.
+2. **Never Commit Secrets**: Ensure `.env`, API keys, private passwords, and JWT secrets are kept in `.gitignore`.
+3. **Commit Clean Packages**: When package dependencies change, commit `package.json` and `package-lock.json` or `pom.xml`.

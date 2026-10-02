@@ -2,13 +2,14 @@ package com.personalvault.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +23,14 @@ public class JwtService {
 
     @Value("${jwt.expiration}")
     private long jwtExpiration;
+
+    private SecretKey cachedSigningKey;
+
+    @PostConstruct
+    public void init() {
+        // Cache the signing key and validate key strength at startup
+        cachedSigningKey = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -48,7 +57,9 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        return username != null
+                && username.equalsIgnoreCase(userDetails.getUsername())
+                && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
@@ -83,9 +94,7 @@ public class JwtService {
             if (!"oauth_state".equals(claims.get("type"))) {
                 return null;
             }
-            if (claims.getExpiration().before(new Date())) {
-                return null;
-            }
+            // Expiration is already checked by extractAllClaims (throws ExpiredJwtException)
             return claims.getSubject();
         } catch (Exception e) {
             return null;
@@ -111,9 +120,7 @@ public class JwtService {
             if (!"vault_session".equals(claims.get("type"))) {
                 return false;
             }
-            if (claims.getExpiration().before(new Date())) {
-                return false;
-            }
+            // Expiration is already checked by extractAllClaims (throws ExpiredJwtException)
             return userEmail.equalsIgnoreCase(claims.getSubject());
         } catch (Exception e) {
             return false;
@@ -121,6 +128,6 @@ public class JwtService {
     }
 
     private SecretKey getSignInKey() {
-        return Keys.hmacShaKeyFor(secretKey.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        return cachedSigningKey;
     }
 }

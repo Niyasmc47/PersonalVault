@@ -1,6 +1,6 @@
 package com.personalvault.security;
 
-import com.personalvault.entity.auth.User;
+import com.personalvault.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,7 +25,7 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
 
     @Override
     public Map<String, Object> getAttributes() {
-        return attributes;
+        return attributes != null ? attributes : Collections.emptyMap();
     }
 
     @Override

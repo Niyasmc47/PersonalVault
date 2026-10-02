@@ -1,21 +1,21 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import LoginPage from '../features/auth/pages/LoginPage';
-import RegisterPage from '../features/auth/pages/RegisterPage';
-import ProfilePage from '../features/auth/pages/ProfilePage';
-import OAuth2CallbackPage from '../features/auth/pages/OAuth2CallbackPage';
+import LoginPage from '../pages/LoginPage';
+import RegisterPage from '../pages/RegisterPage';
+import ProfilePage from '../pages/ProfilePage';
+import OAuth2CallbackPage from '../pages/OAuth2CallbackPage';
 import ProtectedRoute from './ProtectedRoute';
 import { useAuth } from '../contexts/AuthContext';
 
 import MainLayout from '../layouts/MainLayout';
-import HomePage from '../features/dashboard/pages/HomePage';
-import VaultPage from '../features/vault/pages/VaultPage';
-import ExpensesPage from '../features/expenses/pages/ExpensesPage';
-import SkillsPage from '../features/skills/pages/SkillsPage';
-import ProjectsPage from '../features/projects/pages/ProjectsPage';
-import AchievementsPage from '../features/achievements/pages/AchievementsPage';
-import CertificatesPage from '../features/certificates/pages/CertificatesPage';
-import SocialPage from '../features/social/pages/SocialPage';
-import ResumePage from '../features/resume/pages/ResumePage';
+import HomePage from '../pages/HomePage';
+import VaultPage from '../pages/VaultPage';
+import ExpensesPage from '../pages/ExpensesPage';
+import SkillsPage from '../pages/SkillsPage';
+import ProjectsPage from '../pages/ProjectsPage';
+import AchievementsPage from '../pages/AchievementsPage';
+import CertificatesPage from '../pages/CertificatesPage';
+import SocialPage from '../pages/SocialPage';
+import ResumePage from '../pages/ResumePage';
 
 export default function AppRoutes() {
   const { isAuthenticated, isLoading } = useAuth();

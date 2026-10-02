@@ -1,144 +1,228 @@
 # PersonalVault Architecture
 
-## 1. Overall System Architecture
+## 1. System Overview
 
-PersonalVault is a monorepo with two independent applications:
+PersonalVault is a modular, secure career portfolio and digital vault application built as a clean monorepo:
 
-- `frontend/`: React + TypeScript + Vite client
-- `backend/`: Spring Boot REST API
+- `frontend/`: React 19 + TypeScript + Vite + Tailwind CSS client
+- `backend/`: Spring Boot 3.4 (Java 21+) REST API application
 
-The frontend and backend are developed, run, and deployed independently.
-Communication happens over HTTP/JSON APIs.
+The frontend and backend operate independently and communicate strictly through structured, typed HTTP/JSON REST APIs with JWT-based authentication and AES-256-GCM encrypted vault storage.
 
-### High-level flow
+---
 
-1. User interacts with the React UI.
-2. Frontend calls backend APIs using Axios-based service modules.
-3. Backend controllers receive requests and delegate to services.
-4. Services apply business rules and use repositories.
-5. Repositories read/write database data via JPA.
-6. Backend returns DTO-based JSON responses to the frontend.
+## 2. High-Level System Architecture
 
-## 2. Frontend Architecture
+```mermaid
+graph TD
+    User([User / Browser])
+    
+    subgraph Frontend ["Frontend (React 19 + Vite + TypeScript)"]
+        UI[Pages & Domain Components]
+        Contexts[Auth & Theme Contexts]
+        Services[API Service Layer - Axios]
+        SmartDropUI[SmartDrop Drag & Drop Zone + Review Modal]
+    end
 
-Current frontend architecture is feature-based under `frontend/src`.
+    subgraph Backend ["Backend (Spring Boot 3.4 / Java 21+)"]
+        Security[Spring Security + JWT + OAuth2]
+        Controllers[REST Controllers - com.personalvault.controller]
+        ServicesLayer[Business Services - com.personalvault.service]
+        
+        subgraph SmartDropPipeline ["SmartDrop Pipeline"]
+            Extractors[Content Extractors - PDFBox, POI, Tesseract, Tika]
+            Classifiers[AI / Rule-Based Document Classifiers]
+            SmartDropSvc[SmartDrop Ingestion Service]
+        end
+        
+        Repositories[Spring Data JPA Repositories]
+        VaultSecurity[AES-256-GCM Vault Encryption Engine]
+    end
+
+    subgraph External ["Storage & External Services"]
+        PostgreSQL[(PostgreSQL Database)]
+        GDrive[(Google Drive API)]
+        OpenAI[OpenAI / Gemini AI Services]
+    end
+
+    User --> UI
+    UI --> SmartDropUI
+    SmartDropUI --> Services
+    UI --> Services
+    Services -->|JSON / Multipart Form| Security
+    Security --> Controllers
+    Controllers --> ServicesLayer
+    Controllers --> SmartDropSvc
+    SmartDropSvc --> Extractors
+    SmartDropSvc --> Classifiers
+    Classifiers -.-> OpenAI
+    ServicesLayer --> Repositories
+    ServicesLayer --> VaultSecurity
+    ServicesLayer --> GDrive
+    Repositories --> PostgreSQL
+```
+
+---
+
+## 3. Frontend Architecture
+
+The frontend follows a **clean, layered architecture** where all top-level domain concerns are grouped by their layer rather than deeply nested feature packages.
 
 ```text
 frontend/src/
-├── assets/
-├── components/
-├── layouts/
-├── pages/
-├── features/
-├── hooks/
-├── services/
-├── types/
-├── utils/
-├── routes/
-├── contexts/
-└── styles/
+├── assets/             # Static assets, logos, and illustrations
+├── components/         # Reusable and domain-specific UI components
+│   ├── common/         # Generic UI (Button, Modal, Card, Navbar, etc.)
+│   ├── auth/           # Login, Register, ProtectedRoute
+│   ├── dashboard/      # Dashboard widgets, stats, quick-action cards
+│   ├── smartdrop/      # SmartDropZone, SmartDropModal, FileItemPreview
+│   ├── projects/       # ProjectCard, ProjectModal, ProjectForm
+│   ├── certificates/   # CertificateCard, CertificateModal
+│   ├── skills/         # SkillBadge, SkillCategoryList, SkillModal
+│   ├── achievements/   # AchievementCard, AchievementModal
+│   ├── vault/          # VaultFileCard, VaultSecurityModal, EncryptedViewer
+│   ├── resume/         # ResumeBuilder, SectionEditor, TemplateSelector
+│   ├── social/         # SocialLinksList, SocialLinkModal
+│   ├── expenses/       # ExpenseList, ExpenseSummaryCard, ExpenseModal
+│   └── profile/        # ProfileHeader, UserSettingsForm
+├── contexts/           # Global React Contexts (AuthContext, ThemeContext)
+├── hooks/              # Custom reusable React hooks (useAuth, useDebounce, etc.)
+├── layouts/            # Page layout wrappers (MainLayout, AuthLayout, DashboardLayout)
+├── pages/              # All application route view pages
+│   ├── HomePage.tsx
+│   ├── LoginPage.tsx
+│   ├── RegisterPage.tsx
+│   ├── DashboardPage.tsx
+│   ├── ProjectsPage.tsx
+│   ├── CertificatesPage.tsx
+│   ├── SkillsPage.tsx
+│   ├── AchievementsPage.tsx
+│   ├── VaultPage.tsx
+│   ├── ResumeBuilderPage.tsx
+│   ├── SocialLinksPage.tsx
+│   ├── ExpensesPage.tsx
+│   └── ProfilePage.tsx
+├── routes/             # App routing tree and authentication guards (AppRoutes.tsx)
+├── services/           # Typed Axios API clients (authService, projectService, smartdropService, etc.)
+├── styles/             # Tailwind CSS tokens, animations, and global stylesheets
+├── types/              # Domain TypeScript interfaces and API DTO models
+└── utils/              # Pure utility functions (formatting, date, validation)
 ```
 
-### Responsibilities
+### Layer Responsibilities
 
-- `assets/`: static images/icons/fonts
-- `components/`: reusable cross-feature UI components
-- `layouts/`: app layout wrappers (dashboard layout, auth layout, etc.)
-- `pages/`: route-level pages not owned by a single feature
-- `features/`: feature modules (`auth`, `vault`, `expenses`, etc.)
-- `hooks/`: shared custom hooks used by multiple features
-- `services/`: shared API clients or common service utilities
-- `types/`: shared TypeScript interfaces/types
-- `utils/`: pure helper functions
-- `routes/`: route configuration and route guards
-- `contexts/`: React context providers
-- `styles/`: global styling tokens, theme, and shared CSS
+- **`pages/`**: Route entry-point components. Responsible for page-level state orchestration, data fetching triggers, and coordinating domain components.
+- **`components/`**: Modular, presentational, and interactive components grouped cleanly by domain folder.
+- **`services/`**: Centralized HTTP API calls using a configured Axios client instance (`api.ts`). Zero raw fetch/Axios in components.
+- **`types/`**: Strongly-typed interfaces matching backend DTO schemas for compile-time safety.
+- **`contexts/`**: Shared client-side global state (User authentication state, JWT tokens, active themes).
 
-### Feature module pattern
+---
 
-Each feature folder is self-contained:
+## 4. Backend Architecture
 
-```text
-features/<feature-name>/
-├── components/
-├── pages/
-├── hooks/
-├── services/
-├── types/
-└── index.ts
-```
-
-## 3. Backend Architecture
-
-Backend follows layered architecture with feature-based subpackages.
+The backend follows a **flat layered Spring Boot architecture** with unified packages under `com.personalvault`:
 
 ```text
 backend/src/main/java/com/personalvault/
-├── config/
-├── security/
-├── controller/
-├── dto/
-├── entity/
-├── repository/
-├── service/
-├── exception/
-├── mapper/
-└── util/
+├── config/             # Spring configuration (CorsConfig, SecurityConfig, AppConfig)
+├── security/           # JWT filters, TokenProvider, UserDetailsService, PasswordEncoder
+├── controller/         # REST API Controllers (AuthController, ProjectController, SmartDropController, etc.)
+├── dto/                # Request and Response Data Transfer Objects
+├── entity/             # JPA Domain Entities (User, Project, Certificate, VaultItem, etc.)
+├── repository/         # Spring Data JPA Repository interfaces
+├── service/            # Business logic and transaction orchestration services
+├── extractor/          # SmartDrop content extractors (PDF, DOCX, Image, Text)
+├── classifier/         # SmartDrop classification strategies (OpenAI, Gemini, RuleBased)
+├── model/              # Internal domain models (ExtractedContent, ClassificationResult)
+├── mapper/             # Entity <-> DTO conversion mappers
+├── exception/          # GlobalExceptionHandler and domain-specific exceptions
+└── util/               # Security, encryption, and cryptographic helpers (AESGCMUtil, FileUtils)
 ```
 
-Feature subpackages are prepared under relevant layers:
+### Backend Layer Responsibilities
 
-- `auth`
-- `vault`
-- `expense`
-- `skill`
-- `project`
-- `achievement`
-- `certificate`
-- `social`
-- `resume`
+- **`controller/`**: Handles HTTP requests, enforces request validation (`@Valid`), and returns `ResponseEntity<ApiResponse<T>>` or DTOs.
+- **`service/`**: Implements core business logic, permissions enforcement, database transactions (`@Transactional`), and external service coordination.
+- **`extractor/` & `classifier/`**: Implements the content extraction and document classification engines for SmartDrop.
+- **`entity/` & `repository/`**: Defines relational schema and Spring Data queries.
+- **`dto/`**: Encapsulates API payload contracts, decoupling REST contracts from JPA entities.
+- **`security/` & `util/`**: Enforces stateless JWT validation, user session identity, and AES-256-GCM vault encryption.
 
-Example for one feature (`expense`):
+---
 
-```text
-entity/expense/
-repository/expense/
-service/expense/
-controller/expense/
-dto/expense/
-mapper/expense/
+## 5. SmartDrop Intelligent Ingestion Pipeline
+
+SmartDrop allows users to drop single or multiple documents of various formats (PDF, DOCX, TXT, Images) onto PersonalVault. It extracts content, classifies the document using AI or heuristic models, extracts structured metadata, and presents a **Human-in-the-Loop confirmation dialog** before persisting to the user's vault or portfolio.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User
+    participant UI as SmartDrop UI (Dashboard)
+    participant Ctrl as SmartDropController
+    participant Svc as SmartDropService
+    participant Ext as ExtractorFactory
+    participant Clf as DocumentClassifierService
+    participant Mod as PersonalVault Modules
+
+    User->>UI: Drag & Drop Files (PDF, Image, DOCX, TXT)
+    UI->>Ctrl: POST /api/smartdrop/analyze (Multipart file)
+    Ctrl->>Svc: analyzeFile(file, userId)
+    Svc->>Ext: getExtractor(contentType / extension)
+    Ext-->>Svc: ExtractedContent (rawText, metadata, ocrUsed)
+    Svc->>Clf: classify(extractedContent)
+    Clf-->>Svc: ClassificationResult (type, confidence, metadata, suggestedDestination)
+    Svc-->>Ctrl: SmartDropAnalysisResponse
+    Ctrl-->>UI: 200 OK (Analysis & Extracted Metadata)
+    
+    Note over UI,User: Human-in-the-Loop Review
+    UI->>User: Display Preview, Classification, Confidence, and Editable Fields
+    User->>UI: Confirm or Modify Destination & Fields
+    
+    UI->>Ctrl: POST /api/smartdrop/confirm (Confirmed Target & Data)
+    Ctrl->>Svc: routeAndPersist(confirmRequest, userId)
+    Svc->>Mod: Save to Certificate / Project / Achievement / Secure Vault / Resume
+    Mod-->>Svc: Persisted Entity
+    Svc-->>Ctrl: Success Response
+    Ctrl-->>UI: 200 OK (Item Saved)
+    UI->>User: Display Success Toast & Update Dashboard Stats
 ```
 
-### Layer responsibilities
+### Content Extraction Engines (`com.personalvault.extractor`)
+- **`PdfContentExtractor`**: Uses **Apache PDFBox** for text rendering. Falls back to **Tesseract OCR** for scanned/image-only PDFs.
+- **`DocxContentExtractor`**: Uses **Apache POI** (`XWPFDocument`) to extract paragraphs, tables, and document properties.
+- **`TextContentExtractor`**: Direct stream parsing with encoding detection.
+- **`ImageContentExtractor`**: Performs optical character recognition via **Tesseract OCR / Vision**.
 
-- `config/`: Spring configuration classes
-- `security/`: security setup and auth filters/config
-- `controller/`: REST API endpoints
-- `dto/`: request/response transport models
-- `entity/`: JPA domain models
-- `repository/`: Spring Data repository interfaces
-- `service/`: business rules and orchestration
-- `exception/`: custom exceptions and handlers
-- `mapper/`: entity <-> DTO mapping logic
-- `util/`: stateless utility helpers
+### Classification Engines (`com.personalvault.classifier`)
+- **`OpenAiDocumentClassifier` / `GeminiDocumentClassifier`**: LLM-driven structured JSON classification identifying document type, confidence score, and domain metadata (e.g. `issuingOrganization`, `credentialId`, `technologies`, `dates`).
+- **`RuleBasedDocumentClassifier`**: Resilient fallback regex and heuristic rule engine ensuring zero-breakage when offline or when no API key is provided.
 
-## 4. Frontend-Backend Communication Rules
+### Destination Mapping
+1. **`CERTIFICATE`** $\rightarrow$ `Certificates` module
+2. **`PROJECT`** $\rightarrow$ `Projects` module
+3. **`ACHIEVEMENT`** $\rightarrow$ `Achievements` module
+4. **`IDENTITY_DOCUMENT`** $\rightarrow$ `Secure Vault` (Identity Documents)
+5. **`FINANCIAL_DOCUMENT`** $\rightarrow$ `Secure Vault` (Financial Documents)
+6. **`EDUCATIONAL_DOCUMENT`** $\rightarrow$ `Secure Vault` (Educational Documents)
+7. **`RESUME`** $\rightarrow$ `Resume Builder` import workflow
+8. **`OTHER_DOCUMENT`** $\rightarrow$ `Secure Vault` (Other Documents)
 
-- Frontend never accesses database directly.
-- Frontend calls backend endpoints through service files.
-- Controllers return DTOs, not entities.
-- Validation and security checks are done in backend layers.
-- API contracts should be documented per feature before implementation.
+---
 
-## 5. Why Feature-Based Organization
+## 6. Secure Vault & Privacy Architecture
 
-This structure keeps each feature cohesive and easier to assign to separate developers.
-Developers can work in parallel on isolated feature folders with fewer merge conflicts.
+The Secure Vault module stores sensitive records (Government IDs, Tax documents, Academic transcripts, Bank statements):
 
-## 6. Team Collaboration Readiness
+- **Encryption at Rest**: Files and sensitive fields are encrypted using **AES-256-GCM** with unique initialization vectors (IV) before storage.
+- **Zero Logging Policy**: Content extractors and classifiers sanitize sensitive PII and never write raw identity or financial details to application logs.
+- **Access Control**: Every vault query is scoped to `SecurityUtils.getCurrentUserId()` preventing IDOR or cross-tenant data leakage.
 
-The architecture is intentionally scaffold-only:
+---
 
-- No feature behavior is implemented yet.
-- No placeholder API/business logic is added.
-- Folder boundaries are ready so each team member can start feature work immediately.
+## 7. API Communication & Contract Rules
+
+1. **Layered Isolation**: Controllers never expose JPA Entities directly; all responses return `ApiResponse<T>` or strongly-typed DTOs.
+2. **Frontend Service Encapsulation**: React components never invoke `axios` directly; all API calls are made via typed functions in `src/services/`.
+3. **Stateless Authentication**: Frontend attaches JWT tokens in the `Authorization: Bearer <token>` header, verified by backend Spring Security filters.

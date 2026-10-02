@@ -5,6 +5,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +20,8 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
@@ -36,7 +40,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwt = null;
         final String userEmail;
 
-        if (request.getCookies() != null) {
+        // 1. Check Authorization: Bearer header first
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwt = authHeader.substring(7);
+        }
+
+        // 2. Fall back to cookie if no Authorization header
+        if (jwt == null && request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
                 if ("jwt".equals(cookie.getName())) {
                     jwt = cookie.getValue();
@@ -45,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        if (jwt == null) {
+        if (jwt == null || jwt.isBlank()) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -68,9 +79,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            // If token is invalid/expired, we don't set authentication and let the request continue to be handled by Spring Security
+            // If token is invalid/expired, don't set authentication — Spring Security will handle 401
+            log.debug("JWT validation failed: {}", e.getMessage());
         }
-        
+
         filterChain.doFilter(request, response);
     }
 }

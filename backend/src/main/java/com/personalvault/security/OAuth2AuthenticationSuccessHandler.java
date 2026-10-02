@@ -34,7 +34,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         cookie.setHttpOnly(true);
         cookie.setSecure(false); // Should be true in production with HTTPS
         cookie.setPath("/");
-        cookie.setMaxAge(1000 * 60 * 24); // 24 hours
+        cookie.setMaxAge(24 * 60 * 60); // 24 hours in seconds (86400)
         response.addCookie(cookie);
 
         getRedirectStrategy().sendRedirect(request, response, frontendUrl + "/home"); // No need for oauth2 callback page if cookie is set

@@ -1,7 +1,7 @@
 package com.personalvault.security;
 
-import com.personalvault.entity.auth.User;
-import com.personalvault.repository.auth.UserRepository;
+import com.personalvault.entity.User;
+import com.personalvault.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
